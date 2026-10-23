@@ -8,7 +8,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using VFormat.Core;
 
-namespace VFormat.Cli
+namespace VFormat.Docx
 {
     /// <summary>Đọc/ghi .docx (OpenXML) tương đương WordReader + Formatter của add-in.</summary>
     public class DocxModel
@@ -311,7 +311,7 @@ namespace VFormat.Cli
         static readonly Regex[] SpacingFixes =
         {
             new Regex(" {2,}"),
-            new Regex(@" +(?=[,\.;:\?!\)])"),
+            new Regex(@" +(?=[,;:\?!\)]|\.(?!\.))"),
             new Regex(@"(?<=\() +"),
         };
 

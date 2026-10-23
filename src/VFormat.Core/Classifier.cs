@@ -119,6 +119,10 @@ namespace VFormat.Core
                     if (Regex.IsMatch(key[i], @"^(CAN CU|KINH GUI|THUC HIEN|CHUONG|DIEU \d|I\.|1\.)") || s.Length > 250 || s.EndsWith(":"))
                         break;
                     if (count > 0 && s.EndsWith(".") && s.Length > 120) break;
+                    if (count == 0 && TextUtil.IsAllUpper(s) && DocTypes.Any(d => key[i] == d))
+                    {
+                        k[i] = ElementKind.TenLoai; continue;   // "VĂN BẢN HỢP NHẤT" ↵ "THÔNG TƯ"
+                    }
                     // dòng in hoa sau tên loại là thẩm quyền ban hành ("GIÁM ĐỐC SỞ ..."), không phải trích yếu
                     if (TextUtil.IsAllUpper(s) && standard != StandardKind.GiaoDuc_CV5512) break;
                     k[i] = ElementKind.TrichYeu; count++;
@@ -210,7 +214,7 @@ namespace VFormat.Core
                 else if (RxLaMa.IsMatch(s) && s.Length < 200) kind = ElementKind.MucLaMa;
                 else if ((RxSoMuc.IsMatch(s) || RxHoatDong.IsMatch(s)) && IsHeadingLike(s)) kind = ElementKind.MucSo;
                 else if (RxChuCai.IsMatch(s) && IsHeadingLike(s) && s.Length < 90) kind = ElementKind.MucChuCai;
-                else if (TextUtil.IsAllUpper(s) && TextUtil.WordCount(s) <= 12 && i > bodyStart) kind = ElementKind.TenPhanChuong;
+                else if (TextUtil.IsAllUpper(s) && TextUtil.WordCount(s) <= 12 && i >= bodyStart) kind = ElementKind.TenPhanChuong;
                 else kind = ElementKind.Body;
                 k[i] = kind;
                 afterStructural = kind == ElementKind.Phan || kind == ElementKind.Chuong || kind == ElementKind.Muc;

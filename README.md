@@ -3,6 +3,21 @@
 Add-in tích hợp trực tiếp vào Microsoft Word trên Windows (Office 2013+ / Microsoft 365, 32 và 64 bit).
 Chạy **100% offline**, không gửi dữ liệu văn bản ra ngoài.
 
+Có hai cách dùng:
+
+1. **App V-FORMAT (`VFormat.exe`)** — chạy độc lập, không cần mở Word: kéo thả tệp `.docx` (hoặc cả thư mục) vào cửa sổ,
+   app tạo tệp `<tên>_chuan.docx` đúng thể thức; tab *Tạo văn bản từ mẫu* sinh văn bản mới từ thư viện mẫu.
+2. **Add-in trong Microsoft Word** — tab V-FORMAT trên Ribbon (chuẩn hóa, rà soát, chính tả, chèn thành phần...).
+
+## App V-FORMAT (kéo thả)
+
+- Tải `VFormat-App.zip`, giải nén, chạy `VFormat.exe` (Windows 10/11 64 bit; không cần cài .NET, không cần Word).
+  Windows SmartScreen có thể cảnh báo vì tệp chưa ký số: *More info → Run anyway*.
+- Chọn quy chuẩn (mặc định **Tự nhận diện**), cỡ chữ 13/14, giãn dòng, nơi lưu (cạnh tệp gốc hoặc thư mục khác).
+- Kéo thả tệp/thư mục vào khung, hoặc bấm vào khung để chọn nhiều tệp. Kéo thả tệp lên biểu tượng `VFormat.exe` cũng được.
+- Bảng kết quả: quy chuẩn nhận diện được, số lỗi thể thức trước → sau; bấm đúp để mở tệp, *Xem báo cáo* để xem chi tiết.
+- Chỉ nhận `.docx`; tệp `.doc` cũ hãy mở bằng Word và *Save As* `.docx` trước. Tệp gốc không bị sửa.
+
 ## Hỗ trợ 6 hệ quy chuẩn
 
 | Mã | Văn bản quy định | Phạm vi |
@@ -62,6 +77,8 @@ Bộ cài `.exe` tùy chọn: `iscc installer\VFormat.iss` (Inno Setup 6, trên 
 - Bộ mẫu `samples/`: **đầu vào** do `tools/make_samples.py` sinh tự động (cố ý sai thể thức: Arial, khổ Letter, sai Quốc hiệu,
   tiêu ngữ, số ký hiệu, ngày tháng, nơi nhận...); **đầu ra** do `tools/VFormat.Cli` tạo hoàn toàn tự động bằng cùng lõi với add-in,
   không chỉnh tay. Đầu ra hợp lệ schema OOXML và đã mở kiểm tra bằng Microsoft Word.
+- App `VFormat.exe`: build/publish thành công (PE x64), engine đã kiểm với 5 mẫu + 23 mẫu thư viện (0 lỗi, schema hợp lệ);
+  **giao diện chưa chạy thử trên Windows**.
 - Add-in COM trên Windows (Ribbon, Task Pane, vẽ đường kẻ bằng shape): build thành công, **chưa kiểm thử trên Word for Windows**.
 
 ## Test không cần Word (macOS/Linux/Windows)
@@ -92,6 +109,8 @@ src/VFormat.Core/        Lõi thuần .NET Standard 2.0 (không phụ thuộc Wo
   Planner.cs             Kế hoạch dàn bảng / định dạng từng đoạn (dùng chung add-in + CLI)
 src/VFormat.AddIn/       COM add-in Word (net48): Connect (Ribbon), TaskPaneHost, Formatter, Layout, PageNumbers, Services
 tests/VFormat.Core.Tests Unit test lõi
+src/VFormat.Docx/        Engine chuẩn hóa .docx bằng OpenXML (không cần Word) — dùng cho app và CLI
+src/VFormat.App/         App WinForms kéo thả (net10.0-windows, publish một tệp VFormat.exe)
 tools/VFormat.Cli        Chuẩn hóa .docx bằng dòng lệnh (test không cần Word)
 samples/                 Văn bản mẫu: input (sai thể thức), output, render, compare.html
 installer/               install.ps1 / uninstall.ps1 (đăng ký COM per-user), VFormat.iss

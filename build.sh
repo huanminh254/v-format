@@ -9,4 +9,9 @@ cp src/VFormat.AddIn/bin/Release/net48/VFormat.AddIn.dll dist/VFormat/
 cp installer/install.ps1 installer/uninstall.ps1 installer/install.cmd installer/uninstall.cmd dist/VFormat/
 cp README.md dist/VFormat/
 (cd dist && zip -qr VFormat.zip VFormat)
-echo "Đã tạo dist/VFormat.zip"
+echo "Đã tạo dist/VFormat.zip (add-in Word)"
+
+# App độc lập: một tệp VFormat.exe (win-x64, kèm .NET, không cần cài gì)
+dotnet publish src/VFormat.App -c Release -o dist/app -p:DebugType=none -v q
+(cd dist/app && rm -f VFormat-App.zip && zip -q ../VFormat-App.zip VFormat.exe)
+echo "Đã tạo dist/VFormat-App.zip (app kéo thả)"

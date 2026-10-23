@@ -141,4 +141,25 @@ public class CoreTests
         }, k);
         Assert.Equal("Kim Bảng, ngày 03 tháng 02 năm 2026", TextNormalizer.Fix(ElementKind.DiaDanhNgayThang, paras[5].Text, Profiles.Dang()));
     }
+
+    [Fact]
+    public void KeepsSpaceBeforeEllipsisPlaceholder()
+    {
+        Assert.Equal("Kính gửi: ...", TextNormalizer.FixSpacing("Kính gửi: ..."));
+        Assert.Equal("Họ và tên: ...; lớp: ...", TextNormalizer.FixSpacing("Họ và tên: ... ; lớp: ..."));
+        Assert.Equal("Hết.", TextNormalizer.FixSpacing("Hết ."));
+        Assert.Equal("- ...;", TextNormalizer.FixNoiNhanItem("- ...;", false));
+        Assert.Equal("- Lưu: VT, ....", TextNormalizer.FixNoiNhanItem("- Lưu: VT, ....", true));
+        Assert.Equal("- Lưu: VT.", TextNormalizer.FixNoiNhanItem("- Lưu: VT.", true));
+    }
+
+    [Fact]
+    public void ConsolidatedDocumentHasTwoTitleLines()
+    {
+        var k = Classifier.Classify(Doc("BỘ TÀI CHÍNH", "Số: 1/VBHN-BTC", "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM",
+            "Độc lập - Tự do - Hạnh phúc", "Hà Nội, ngày 01 tháng 3 năm 2026", "VĂN BẢN HỢP NHẤT", "THÔNG TƯ", "Quy định về kế toán",
+            "Chương I", "QUY ĐỊNH CHUNG"), StandardKind.PhapDien_ND250).Kinds;
+        Assert.Equal(new[] { ElementKind.TenLoai, ElementKind.TenLoai, ElementKind.TrichYeu, ElementKind.Chuong, ElementKind.TenPhanChuong },
+            k.Skip(5).ToArray());
+    }
 }

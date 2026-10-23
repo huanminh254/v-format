@@ -87,7 +87,7 @@ namespace VFormat.Core
                 Reason = "Từ bị lặp",
             });
             _rules.Add(new Rule { Pattern = new Regex(@" {2,}"), Replacement = " ", Reason = "Thừa khoảng trắng" });
-            _rules.Add(new Rule { Pattern = new Regex(@" +(?=[,\.;:\?!])"), Replacement = "", Reason = "Khoảng trắng trước dấu câu" });
+            _rules.Add(new Rule { Pattern = new Regex(@" +(?=[,;:\?!]|\.(?!\.))"), Replacement = "", Reason = "Khoảng trắng trước dấu câu" });
 
             if (userRuleLines != null)
                 foreach (var line in userRuleLines)

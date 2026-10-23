@@ -66,7 +66,10 @@ namespace VFormat.Core
         {
             s = Regex.Replace(s, @"^[\-\+•–]\s*", "- ");
             if (!s.StartsWith("- ")) s = "- " + s;
-            s = Regex.Replace(s, @"[\s;,\.]+$", "");
+            s = Regex.Replace(s, @"[\s;,]+$", "");
+            // bỏ dấu chấm kết thúc cũ nhưng giữ "..." (chỗ để trống): "Lưu: VT." → "Lưu: VT", "VT, ...." → "VT, ..."
+            int dots = s.Length - s.TrimEnd('.').Length;
+            if (dots % 3 == 1) s = s.Substring(0, s.Length - 1).TrimEnd();
             return s + (isLast ? "." : separator);
         }
 
@@ -85,7 +88,7 @@ namespace VFormat.Core
         public static string FixSpacing(string s)
         {
             s = Regex.Replace(s, @" {2,}", " ");
-            s = Regex.Replace(s, @" +([,\.;:\?!\)\]])", "$1");
+            s = Regex.Replace(s, @" +([,;:\?!\)\]]|\.(?!\.))", "$1");   // giữ " ..." (chỗ để trống)
             s = Regex.Replace(s, @"([\(\[]) +", "$1");
             s = Regex.Replace(s, @"([,;])(?=[^\s\d""”’\)])", "$1 ");
             return s.Trim();
