@@ -181,4 +181,20 @@ public class CoreTests
         Assert.Equal(ElementKind.HoTenKy, cd.Kinds.Last());
         Assert.DoesNotContain(FormatChecker.Check(cd, p), i => i.Message.Contains("cấp bậc hàm"));
     }
+
+    [Fact]
+    public void MessagesUseVietnameseDecimalSeparatorOnAnyCulture()
+    {
+        var saved = System.Globalization.CultureInfo.CurrentCulture;
+        System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+        try
+        {
+            var p = Profiles.HanhChinh();
+            var issues = FormatChecker.Check(Classifier.Classify(Doc(QuyetDinh), p.Kind), p,
+                new PageInfo { WidthMm = 210, HeightMm = 297, TopMm = 20, BottomMm = 20, LeftMm = 30, RightMm = 31.8f });
+            Assert.Contains(issues, i => i.Message.Contains("31,8 mm"));
+            Assert.Equal("en-US", System.Globalization.CultureInfo.CurrentCulture.Name);
+        }
+        finally { System.Globalization.CultureInfo.CurrentCulture = saved; }
+    }
 }

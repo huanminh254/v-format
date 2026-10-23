@@ -19,6 +19,15 @@ namespace VFormat.Core
 
         public static List<Issue> Check(ClassifiedDocument doc, FormatProfile p, PageInfo page = null)
         {
+            // số thập phân trong thông báo luôn theo định dạng Việt Nam ("31,8 mm") bất kể ngôn ngữ của Windows
+            var saved = System.Globalization.CultureInfo.CurrentCulture;
+            System.Globalization.CultureInfo.CurrentCulture = TextUtil.Vi;
+            try { return CheckCore(doc, p, page); }
+            finally { System.Globalization.CultureInfo.CurrentCulture = saved; }
+        }
+
+        static List<Issue> CheckCore(ClassifiedDocument doc, FormatProfile p, PageInfo page)
+        {
             var issues = new List<Issue>();
             void Add(int group, int para, string msg, Severity sev = Severity.Warning, bool fix = true) =>
                 issues.Add(new Issue { Code = Code(p, group), ParagraphIndex = para, Message = msg, Severity = sev, AutoFixable = fix });
