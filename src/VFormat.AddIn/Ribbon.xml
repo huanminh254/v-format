@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui" onLoad="OnRibbonLoad">
+  <ribbon>
+    <tabs>
+      <tab id="tabVFormat" label="V-FORMAT">
+
+        <group id="grpFormat" label="Chuẩn hóa tự động">
+          <button id="btnFormat" label="Chuẩn hóa 1-Click" size="large" imageMso="FormatPainter"
+                  screentip="Chuẩn hóa 1-Click" supertip="Căn lề A4, phông Times New Roman, Quốc hiệu - Tiêu ngữ, số ký hiệu, đề mục, chữ ký, nơi nhận và số trang theo quy chuẩn đang chọn."
+                  onAction="OnAction" />
+          <dropDown id="ddStandard" label="Quy chuẩn" sizeString="WWWWWWWWWWWWWWWWWWWWW"
+                    getItemCount="GetItemCount" getItemLabel="GetItemLabel" getItemID="GetItemID"
+                    getSelectedItemIndex="GetSelectedItemIndex" onAction="OnSelect"
+                    supertip="Tự nhận diện hoặc chọn hệ quy chuẩn: NĐ 30, TT 68, HD 05, HD 29, Pháp điển, CV 5512." />
+          <dropDown id="ddSize" label="Cỡ chữ" sizeString="WWWWW"
+                    getItemCount="GetItemCount" getItemLabel="GetItemLabel" getItemID="GetItemID"
+                    getSelectedItemIndex="GetSelectedItemIndex" onAction="OnSelect" />
+          <dropDown id="ddSpacing" label="Giãn dòng" sizeString="WWWWW"
+                    getItemCount="GetItemCount" getItemLabel="GetItemLabel" getItemID="GetItemID"
+                    getSelectedItemIndex="GetSelectedItemIndex" onAction="OnSelect" />
+        </group>
+
+        <group id="grpReview" label="Rà soát thể thức">
+          <button id="btnReview" label="Rà soát thể thức" size="large" imageMso="ReviewNewComment"
+                  supertip="Phát hiện và đánh dấu bằng nhận xét các đoạn sai thể thức." onAction="OnAction" />
+          <button id="btnClearVF" label="Xóa nhận xét V-Format" imageMso="ReviewDeleteComment" onAction="OnAction" />
+          <button id="btnClearAll" label="Xóa tất cả nhận xét" imageMso="Delete" onAction="OnAction" />
+        </group>
+
+        <group id="grpPage" label="Bố cục trang in A4">
+          <button id="btnPageSetup" label="Lề trang A4" imageMso="PageMarginsGallery" onAction="OnAction" />
+          <button id="btnPageNumber" label="Đánh số trang" imageMso="HeaderFooterPageNumberInsertGallery" onAction="OnAction" />
+          <toggleButton id="tglDuplex" label="In hai mặt" imageMso="PageOrientationGallery"
+                        supertip="Lề đối xứng cho in hai mặt (lưu riêng cho từng tài liệu)."
+                        getPressed="GetPressed" onAction="OnToggle" />
+          <button id="btnTables" label="Chuẩn hóa bảng" imageMso="TableInsert"
+                  supertip="Bảng vừa khổ giấy, tự lặp hàng tiêu đề khi sang trang." onAction="OnAction" />
+        </group>
+
+        <group id="grpInsert" label="Chèn thành phần thể thức">
+          <button id="btnInsHeader" label="Khối đầu" size="large" imageMso="HeaderInsertGallery"
+                  supertip="Chèn Quốc hiệu, Tiêu ngữ, tên cơ quan, số ký hiệu, ngày tháng (bảng 2 cột)." onAction="OnAction" />
+          <button id="btnInsSign" label="Chữ ký &amp; Nơi nhận" size="large" imageMso="SignatureLineInsert" onAction="OnAction" />
+          <button id="btnInsNoiNhan" label="Nơi nhận" imageMso="BulletsGallery" onAction="OnAction" />
+          <button id="btnInsDate" label="Địa danh, ngày tháng" imageMso="DateAndTimeInsert" onAction="OnAction" />
+        </group>
+
+        <group id="grpSpell" label="Chính tả Offline">
+          <button id="btnSpell" label="Kiểm tra chính tả" size="large" imageMso="SpellingAndGrammar" onAction="OnAction" />
+          <button id="btnSpellFix" label="Sửa tự động" imageMso="AutoCorrect" onAction="OnAction" />
+          <button id="btnDict" label="Từ điển riêng" imageMso="ReviewThesaurus" onAction="OnAction" />
+        </group>
+
+        <group id="grpLibrary" label="Thư viện mẫu">
+          <dynamicMenu id="mnuTemplates" label="Thư viện mẫu" size="large" imageMso="FileNew" getContent="GetTemplateMenu" />
+          <button id="btnSaveTemplate" label="Lưu làm mẫu" imageMso="FileSaveAs" onAction="OnAction" />
+          <button id="btnTemplateFolder" label="Thư mục mẫu" imageMso="FileOpen" onAction="OnAction" />
+        </group>
+
+        <group id="grpPane" label="V-Format">
+          <toggleButton id="tglPane" label="Bảng điều khiển" size="large" imageMso="ControlsGallery"
+                        getPressed="GetPressed" onAction="OnToggle" />
+          <button id="btnAbout" label="Giới thiệu" imageMso="Info" onAction="OnAction" />
+        </group>
+
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>

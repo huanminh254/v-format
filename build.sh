@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Build + đóng gói bộ cài V-FORMAT (chạy được trên macOS/Linux/Windows có .NET SDK 6+)
+set -euo pipefail
+cd "$(dirname "$0")"
+dotnet test tests/VFormat.Core.Tests -v q
+dotnet build src/VFormat.AddIn -c Release -v q
+rm -rf dist && mkdir -p dist/VFormat
+cp src/VFormat.AddIn/bin/Release/net48/VFormat.AddIn.dll dist/VFormat/
+cp installer/install.ps1 installer/uninstall.ps1 installer/install.cmd installer/uninstall.cmd dist/VFormat/
+cp README.md dist/VFormat/
+(cd dist && zip -qr VFormat.zip VFormat)
+echo "Đã tạo dist/VFormat.zip"

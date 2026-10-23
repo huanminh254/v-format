@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/VFormat.Core/VFormat.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/VFormat.Core.Tests/VFormat.Core.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/VFormat.Cli/VFormat.Cli.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>VFormat.AddIn</RootNamespace>
+    <AssemblyName>VFormat.AddIn</AssemblyName>
+    <Version>1.0.0</Version>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <!-- COM add-in: đăng ký bằng installer/install.ps1 (per-user, không cần quyền admin) -->
+    <ComVisible>false</ComVisible>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Office.Interop.Word" Version="15.0.4797.1004" />
+    <PackageReference Include="MicrosoftOfficeCore" Version="15.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <!-- Biên dịch chung mã nguồn Core vào DLL add-in: COM activation không dò được DLL phụ thuộc nằm cạnh add-in -->
+  <ItemGroup>
+    <Compile Include="..\VFormat.Core\**\*.cs" Exclude="..\VFormat.Core\obj\**;..\VFormat.Core\bin\**" Link="Core\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Ribbon.xml" LogicalName="VFormat.AddIn.Ribbon.xml" />
+  </ItemGroup>
+  <!-- Nhúng kiểu interop (No-PIA) để chạy được trên Office 2013/2016/2019/2021/365 mà không cần cài PIA -->
+  <Target Name="EmbedOfficeInterop" AfterTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <ReferencePath Condition="'%(FileName)' == 'Microsoft.Office.Interop.Word' Or '%(FileName)' == 'office'">
+        <EmbedInteropTypes>true</EmbedInteropTypes>
+        <Private>false</Private>
+      </ReferencePath>
+    </ItemGroup>
+  </Target>
+</Project>
