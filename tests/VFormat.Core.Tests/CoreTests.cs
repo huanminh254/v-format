@@ -85,6 +85,9 @@ public class CoreTests
     [InlineData("KẾ HOẠCH BÀI DẠY", StandardKind.GiaoDuc_CV5512)]
     [InlineData("VĂN BẢN HỢP NHẤT", StandardKind.PhapDien_ND250)]
     [InlineData("ỦY BAN NHÂN DÂN XÃ AN BÌNH", StandardKind.HanhChinh_ND30)]
+    [InlineData("CÔNG AN TỈNH HÀ NAM", StandardKind.CongAn_BCA08)]
+    [InlineData("BỘ CÔNG AN", StandardKind.CongAn_BCA08)]
+    [InlineData("BỘ TƯ LỆNH CẢNH SÁT BIỂN", StandardKind.QuanDoi_TT68)]
     public void DetectsStandard(string line, StandardKind expected) =>
         Assert.Equal(expected, StandardDetector.Detect(Doc("", line, "Số: 1/x")));
 
@@ -161,5 +164,21 @@ public class CoreTests
             "Chương I", "QUY ĐỊNH CHUNG"), StandardKind.PhapDien_ND250).Kinds;
         Assert.Equal(new[] { ElementKind.TenLoai, ElementKind.TenLoai, ElementKind.TrichYeu, ElementKind.Chuong, ElementKind.TenPhanChuong },
             k.Skip(5).ToArray());
+    }
+
+    [Fact]
+    public void PoliceSignerNeedsRank()
+    {
+        var lines = QuyetDinh.Select(x => x.Replace("SỞ NỘI VỤ", "PHÒNG THAM MƯU").Replace("ỦY BAN NHÂN DÂN TỈNH HÀ NAM", "CÔNG AN TỈNH HÀ NAM")).ToArray();
+        var paras = Doc(lines);
+        Assert.Equal(StandardKind.CongAn_BCA08, StandardDetector.Detect(paras));
+        var p = Profiles.CongAn();
+        var issues = FormatChecker.Check(Classifier.Classify(paras, p.Kind), p);
+        Assert.Contains(issues, i => i.Code == "CA08-09" && i.Message.Contains("cấp bậc hàm") && !i.AutoFixable);
+
+        lines[lines.Length - 1] = "Đại tá Trần Thị Bình";
+        var cd = Classifier.Classify(Doc(lines), p.Kind);
+        Assert.Equal(ElementKind.HoTenKy, cd.Kinds.Last());
+        Assert.DoesNotContain(FormatChecker.Check(cd, p), i => i.Message.Contains("cấp bậc hàm"));
     }
 }

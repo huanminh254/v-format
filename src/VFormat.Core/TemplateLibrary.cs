@@ -140,6 +140,21 @@ namespace VFormat.Core
                 new[] { "CHỈ HUY TRƯỞNG BỘ CHỈ HUY QUÂN SỰ TỈNH ...", "Căn cứ ...;", "QUYẾT ĐỊNH:", "Điều 1. " + P, "Điều 2. " + P },
                 "CHỈ HUY TRƯỞNG", NNHanhChinh, StandardKind.QuanDoi_TT68, "Quân đội", "Đại tá Nguyễn Văn A"));
 
+            // ===== Công an (08/VBHN-BCA) =====
+            const StandardKind CA = StandardKind.CongAn_BCA08;
+            list.Add(HanhChinh("ca-cv", "Công văn (Công an)", "CÔNG AN TỈNH ...", "PHÒNG THAM MƯU", "...-PV01", null, "...",
+                new[] { "Kính gửi: ...", P, "Trân trọng./." }, "KT. TRƯỞNG PHÒNG|PHÓ TRƯỞNG PHÒNG", NNCongVan, CA, "Công an", "Thượng tá Nguyễn Văn A"));
+            list.Add(HanhChinh("ca-kh", "Kế hoạch (Công an)", "BỘ CÔNG AN", "CÔNG AN TỈNH ...", "KH-CAT-PV01", "KẾ HOẠCH", "...",
+                new[] { "I. MỤC ĐÍCH, YÊU CẦU", P, "II. NỘI DUNG", P, "III. TỔ CHỨC THỰC HIỆN", P },
+                "GIÁM ĐỐC", NNCongVan, CA, "Công an", "Đại tá Nguyễn Văn A"));
+            list.Add(HanhChinh("ca-bc", "Báo cáo (Công an)", "BỘ CÔNG AN", "CÔNG AN TỈNH ...", "BC-CAT-PV01", "BÁO CÁO", "...",
+                new[] { "I. TÌNH HÌNH", P, "II. KẾT QUẢ CÔNG TÁC", P, "III. PHƯƠNG HƯỚNG, NHIỆM VỤ", P },
+                "GIÁM ĐỐC", NNCongVan, CA, "Công an", "Đại tá Nguyễn Văn A"));
+            list.Add(HanhChinh("ca-qd", "Quyết định (Công an)", "BỘ CÔNG AN", "CÔNG AN TỈNH ...", "QĐ-CAT-PX01", "QUYẾT ĐỊNH", "Về việc ...",
+                new[] { "GIÁM ĐỐC CÔNG AN TỈNH ...", "Căn cứ ...;", "Theo đề nghị của ...", "QUYẾT ĐỊNH:", "Điều 1. " + P, "Điều 2. " + P,
+                        "Điều 3. ... chịu trách nhiệm thi hành Quyết định này./." },
+                "GIÁM ĐỐC", NNHanhChinh, CA, "Công an", "Đại tá Nguyễn Văn A"));
+
             // ===== Đảng (HD 05) =====
             list.Add(DangDoan("d-nq", "Nghị quyết", false, "ĐẢNG BỘ TỈNH ...", "HUYỆN ỦY ...", "NQ/HU", "NGHỊ QUYẾT", "về ...",
                 new[] { "I. TÌNH HÌNH", P, "II. MỤC TIÊU, NHIỆM VỤ", P, "III. TỔ CHỨC THỰC HIỆN", P },

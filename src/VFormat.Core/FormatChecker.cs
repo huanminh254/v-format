@@ -70,6 +70,9 @@ namespace VFormat.Core
                     if (para.Italic >= 0 && (para.Italic == 1) != st.Italic)
                         Add(StyleGroup, i, $"{Describe(kind)} phải {(st.Italic ? "in nghiêng" : "kiểu chữ đứng")}.");
                 }
+                if (kind == ElementKind.HoTenKy && p.RankBeforeSignerName && !Classifier.HasRank(text))
+                    Add(SignGroup, i, $"Ghi cấp bậc hàm trước họ tên người ký (ví dụ: \"Đại tá {text}\") theo {p.FullName}.",
+                        Severity.Warning, false);
                 if (st.UpperCase && !TextUtil.IsAllUpper(text))
                     Add(StyleGroup, i, $"{Describe(kind)} phải viết in hoa.");
 

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace VFormat.Core
 {
-    /// <summary>6 hệ quy chuẩn thể thức được hỗ trợ.</summary>
+    /// <summary>7 hệ quy chuẩn thể thức được hỗ trợ.</summary>
     public enum StandardKind
     {
         HanhChinh_ND30 = 0,   // Nghị định 30/2020/NĐ-CP
@@ -11,6 +11,7 @@ namespace VFormat.Core
         Doan_HD29 = 3,        // Hướng dẫn 29-HD/TWĐTN-VP
         PhapDien_ND250 = 4,   // Pháp điển & hợp nhất văn bản QPPL
         GiaoDuc_CV5512 = 5,   // Kế hoạch bài dạy - CV 5512/BGDĐT-GDTrH
+        CongAn_BCA08 = 6,     // Văn bản hợp nhất 08/VBHN-BCA (công tác văn thư trong CAND)
     }
 
     /// <summary>Loại thành phần thể thức của một đoạn văn.</summary>

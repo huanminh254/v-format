@@ -5,7 +5,7 @@ using System.Linq;
 namespace VFormat.Core
 {
     /// <summary>
-    /// Bộ thông số mặc định cho 6 hệ quy chuẩn. Các giá trị lấy theo phụ lục thể thức của từng văn bản
+    /// Bộ thông số mặc định cho 7 hệ quy chuẩn. Các giá trị lấy theo phụ lục thể thức của từng văn bản
     /// quy định; khi quy định cho phép một khoảng (ví dụ cỡ 13-14) thì Size là giá trị mặc định
     /// còn MinSize/MaxSize là khoảng chấp nhận khi rà soát.
     /// </summary>
@@ -23,6 +23,7 @@ namespace VFormat.Core
                 case StandardKind.Doan_HD29: return Doan();
                 case StandardKind.PhapDien_ND250: return PhapDien();
                 case StandardKind.GiaoDuc_CV5512: return GiaoDuc();
+                case StandardKind.CongAn_BCA08: return CongAn();
                 default: return HanhChinh();
             }
         }
@@ -83,6 +84,25 @@ namespace VFormat.Core
                 FullName = "Nghị định 30/2020/NĐ-CP",
                 Description = "Văn bản hành chính Nhà nước",
                 IssuePrefix = "ND30",
+            };
+            AddCommonStyles(p);
+            return p;
+        }
+
+        /// <summary>
+        /// Văn bản hợp nhất 08/VBHN-BCA (hợp nhất Thông tư 26/2019/TT-BCA): Điều 9 dẫn chiếu thể thức và kỹ thuật
+        /// trình bày theo Điều 8, 9 NĐ 30/2020; phần riêng của CAND là ghi cấp bậc hàm trước họ tên người ký.
+        /// </summary>
+        public static FormatProfile CongAn()
+        {
+            var p = new FormatProfile
+            {
+                Kind = StandardKind.CongAn_BCA08,
+                ShortName = "VBHN 08",
+                FullName = "Văn bản hợp nhất 08/VBHN-BCA",
+                Description = "Văn bản Công an nhân dân",
+                IssuePrefix = "CA08",
+                RankBeforeSignerName = true,
             };
             AddCommonStyles(p);
             return p;

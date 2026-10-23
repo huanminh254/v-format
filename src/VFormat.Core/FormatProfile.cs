@@ -40,6 +40,7 @@ namespace VFormat.Core
         public bool NoiNhanUnderline;            // Đảng/Đoàn: "Nơi nhận:" gạch chân
         public string ThayMatText = "TM.";       // Đảng: "T/M"
         public string NoiNhanSeparator = ";";    // Đảng: ","
+        public bool RankBeforeSignerName;        // Công an: cấp bậc hàm trước họ tên người ký
 
         // Bố cục bảng khối đầu & chữ ký (mm)
         public float HeaderLeftColMm = 72, HeaderRightColMm = 93;   // Quốc hiệu cỡ 12 đậm ≈ 89 mm

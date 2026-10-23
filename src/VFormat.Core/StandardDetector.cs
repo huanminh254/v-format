@@ -15,6 +15,13 @@ namespace VFormat.Core
             "CANH SAT BIEN", "TONG CUC HAU CAN", "TONG CUC KY THUAT", "QUAN DOI NHAN DAN",
         };
 
+        static readonly string[] PoliceKeys =
+        {
+            "BO CONG AN", "CONG AN TINH", "CONG AN THANH PHO", "CONG AN TP", "CONG AN HUYEN", "CONG AN QUAN", "CONG AN THI XA",
+            "CONG AN XA", "CONG AN PHUONG", "CONG AN THI TRAN", "CUC CANH SAT", "PHONG CANH SAT", "HOC VIEN CANH SAT",
+            "HOC VIEN AN NINH", "CUC AN NINH", "PHONG AN NINH", "TONG CUC CANH SAT", "BO TU LENH CANH SAT CO DONG",
+        };
+
         public static StandardKind Detect(IList<ParagraphInfo> paragraphs)
         {
             var head = paragraphs.Take(25).Select(p => TextUtil.Key(p.Text)).Where(t => t.Length > 0).ToList();
@@ -28,6 +35,8 @@ namespace VFormat.Core
                 return StandardKind.Doan_HD29;
             if (all.Any(t => t.StartsWith("VAN BAN HOP NHAT") || t.Contains("PHAP DIEN")))
                 return StandardKind.PhapDien_ND250;
+            if (head.Any(t => PoliceKeys.Any(k => t.StartsWith(k))))
+                return StandardKind.CongAn_BCA08;
             if (head.Any(t => MilitaryKeys.Any(k => t.Contains(k))))
                 return StandardKind.QuanDoi_TT68;
             return StandardKind.HanhChinh_ND30;

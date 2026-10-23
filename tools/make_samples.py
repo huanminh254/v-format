@@ -127,4 +127,18 @@ for t in ["Trường: THCS Lê Hồng Phong", "Tổ: Khoa học tự nhiên", "H
           "d) Tổ chức thực hiện", "Giáo viên chiếu video, học sinh thảo luận nhóm."]:
     add(d, t)
 d.save(os.path.join(OUT, "05-ke-hoach-bai-day.docx"))
+# 6. Công văn Công an (08/VBHN-BCA): đoạn rời, sai chữ, người ký thiếu cấp bậc hàm
+d = new("Arial", 13)
+for t in ["CÔNG AN TỈNH HÀ NAM", "PHÒNG THAM MƯU", "Số:  215 /PV01-TH", "V/v : triển khai công tác bảo đảm an ninh trật tự dịp Tết",
+          "CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM", "Độc lập - Tự do -  Hạnh phúc", "Hà Nam, ngày 9 tháng 2 năm 2026", ""]:
+    add(d, t, align="c" if t.isupper() else None)
+add(d, "Kính gửi : Công an các huyện, thị xã, thành phố")
+for i in range(3): add(d, LOREM)
+add(d, "Đề nghị các đơn vị nghiêm túc triển khai thực hiện./.")
+add(d, "")
+for t in ["Nơi nhận:", "- Như trên", "- Đ/c Giám đốc (để b/c)", "- Lưu: VT, PV01"]:
+    add(d, t)
+for t in ["KT. TRƯỞNG PHÒNG", "PHÓ TRƯỞNG PHÒNG", "", "", "Lê Văn Nam"]:
+    add(d, t, bold=t.isupper(), align="r")
+d.save(os.path.join(OUT, "06-cong-van-cong-an.docx"))
 print("ok", sorted(os.listdir(OUT)))

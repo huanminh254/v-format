@@ -83,7 +83,7 @@ foreach ($c in $classes) {
 $addinKey = "HKCU:\Software\Microsoft\Office\Word\Addins\VFormat.Connect"
 if (-not (Test-Path $addinKey)) { New-Item -Path $addinKey -Force | Out-Null }
 New-ItemProperty -Path $addinKey -Name "FriendlyName" -Value "V-FORMAT" -PropertyType String -Force | Out-Null
-New-ItemProperty -Path $addinKey -Name "Description" -Value "Chuẩn hóa thể thức văn bản Word 1-Click (NĐ 30, TT 68, HD 05, HD 29, Pháp điển, CV 5512)" -PropertyType String -Force | Out-Null
+New-ItemProperty -Path $addinKey -Name "Description" -Value "Chuẩn hóa thể thức văn bản Word 1-Click (NĐ 30, TT 68, Công an, HD 05, HD 29, Pháp điển, CV 5512)" -PropertyType String -Force | Out-Null
 New-ItemProperty -Path $addinKey -Name "LoadBehavior" -Value 3 -PropertyType DWord -Force | Out-Null
 
 # Gỡ cờ "đã vô hiệu hóa" nếu Word từng tắt add-in do lỗi

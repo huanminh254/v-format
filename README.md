@@ -18,16 +18,21 @@ Có hai cách dùng:
 - Bảng kết quả: quy chuẩn nhận diện được, số lỗi thể thức trước → sau; bấm đúp để mở tệp, *Xem báo cáo* để xem chi tiết.
 - Chỉ nhận `.docx`; tệp `.doc` cũ hãy mở bằng Word và *Save As* `.docx` trước. Tệp gốc không bị sửa.
 
-## Hỗ trợ 6 hệ quy chuẩn
+## Hỗ trợ 7 hệ quy chuẩn
 
 | Mã | Văn bản quy định | Phạm vi |
 |---|---|---|
 | NĐ 30 | Nghị định 30/2020/NĐ-CP | Hành chính Nhà nước |
 | TT 68 | Thông tư 68/2023/TT-BQP | Văn bản Quân đội |
+| VBHN 08 | Văn bản hợp nhất 08/VBHN-BCA (2021) | Văn bản Công an nhân dân |
 | HD 05 | Hướng dẫn 05-HD/VPTW | Văn bản Đảng |
 | HD 29 | Hướng dẫn 29-HD/TWĐTN-VP | Văn bản Đoàn TNCS Hồ Chí Minh |
 | NĐ 250 | Pháp điển & hợp nhất QPPL | Văn bản hợp nhất |
 | CV 5512 | Công văn 5512/BGDĐT-GDTrH | Kế hoạch bài dạy |
+
+Công an (08/VBHN-BCA, hợp nhất Thông tư 26/2019/TT-BCA về công tác văn thư trong CAND): Điều 9 dẫn chiếu thể thức theo
+Điều 8, 9 NĐ 30/2020, nên V-Format trình bày như NĐ 30; phần riêng của CAND được rà soát là **cấp bậc hàm trước họ tên người ký**
+(ví dụ "Đại tá Nguyễn Văn A") — app báo lỗi `CA08-09` nhưng không tự điền vì không biết cấp bậc.
 
 Mặc định **tự nhận diện** quy chuẩn (theo tiêu đề Đảng/Đoàn, tên cơ quan quân đội, "KẾ HOẠCH BÀI DẠY", "VĂN BẢN HỢP NHẤT"...),
 hoặc chọn cố định trên Ribbon / bảng điều khiển.
@@ -49,7 +54,7 @@ hoặc chọn cố định trên Ribbon / bảng điều khiển.
 - **Chính tả Offline**: lỗi phụ âm/vần hay gặp (sử lý → xử lý, bổ xung → bổ sung…), viết hoa tên cơ quan theo Phụ lục II NĐ 30
   (uỷ ban nhân dân → Ủy ban nhân dân…), hư từ lặp, khoảng trắng. Tô vàng + nhận xét, hoặc **Sửa tự động**.
   **Từ điển riêng**: `%APPDATA%\VFormat\tu-dien.txt`, mỗi dòng `sai=đúng`.
-- **Thư viện mẫu**: 23 mẫu dựng sẵn (Hành chính, Quân đội, Đảng, Đoàn, Pháp điển, Giáo dục) và **kho mẫu cá nhân**
+- **Thư viện mẫu**: 27 mẫu dựng sẵn (Hành chính, Quân đội, Công an, Đảng, Đoàn, Pháp điển, Giáo dục) và **kho mẫu cá nhân**
   (`%APPDATA%\VFormat\Templates`, nút *Lưu làm mẫu*).
 - **Bảng điều khiển** (Task Pane bên phải): chọn quy chuẩn, cỡ chữ 13/14, giãn dòng, địa danh, bật/tắt từng bước chuẩn hóa,
   danh sách lỗi — bấm vào dòng để nhảy tới đoạn văn.
@@ -76,8 +81,8 @@ Bộ cài `.exe` tùy chọn: `iscc installer\VFormat.iss` (Inno Setup 6, trên 
 - Lõi `VFormat.Core`: unit test pass (`dotnet test`).
 - Bộ mẫu `samples/`: **đầu vào** do `tools/make_samples.py` sinh tự động (cố ý sai thể thức: Arial, khổ Letter, sai Quốc hiệu,
   tiêu ngữ, số ký hiệu, ngày tháng, nơi nhận...); **đầu ra** do `tools/VFormat.Cli` tạo hoàn toàn tự động bằng cùng lõi với add-in,
-  không chỉnh tay. Đầu ra hợp lệ schema OOXML và đã mở kiểm tra bằng Microsoft Word.
-- App `VFormat.exe`: build/publish thành công (PE x64), engine đã kiểm với 5 mẫu + 23 mẫu thư viện (0 lỗi, schema hợp lệ);
+  không chỉnh tay. Đầu ra hợp lệ schema OOXML; mẫu 01–05 đã mở kiểm tra bằng Microsoft Word, mẫu 06 (Công an) mới kiểm qua ảnh Quick Look.
+- App `VFormat.exe`: build/publish thành công (PE x64), engine đã kiểm với 6 mẫu + 27 mẫu thư viện (schema hợp lệ; còn 0 lỗi, trừ mẫu 06 cố ý thiếu cấp bậc hàm người ký);
   **giao diện chưa chạy thử trên Windows**.
 - Add-in COM trên Windows (Ribbon, Task Pane, vẽ đường kẻ bằng shape): build thành công, **chưa kiểm thử trên Word for Windows**.
 
@@ -99,7 +104,7 @@ add-in đo vị trí chữ thật trong Word và vẽ shape.
 
 ```
 src/VFormat.Core/        Lõi thuần .NET Standard 2.0 (không phụ thuộc Word, có unit test)
-  Profiles.cs            Thông số 6 quy chuẩn (lề, cỡ chữ, kiểu chữ từng thành phần)
+  Profiles.cs            Thông số 7 quy chuẩn (lề, cỡ chữ, kiểu chữ từng thành phần)
   Classifier.cs          Nhận diện thành phần thể thức từng đoạn
   StandardDetector.cs    Tự nhận diện quy chuẩn
   TextNormalizer.cs      Sửa chữ Quốc hiệu, số ký hiệu, ngày tháng, nơi nhận...

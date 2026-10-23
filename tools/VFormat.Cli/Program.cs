@@ -10,7 +10,7 @@ namespace VFormat.Cli
 {
     /// <summary>
     /// vformat — chuẩn hóa .docx không cần Word, dùng cùng lõi VFormat.Core với add-in.
-    ///   vformat input.docx output.docx [--standard nd30|tt68|hd05|hd29|nd250|cv5512] [--report report.md]
+    ///   vformat input.docx output.docx [--standard nd30|tt68|ca08|hd05|hd29|nd250|cv5512] [--report report.md]
     /// </summary>
     public static class Program
     {
@@ -21,7 +21,7 @@ namespace VFormat.Cli
             string Opt(string name) { int i = Array.IndexOf(args, name); return i >= 0 && i + 1 < args.Length ? args[i + 1] : null; }
             if (pos.Count < 2)
             {
-                Console.Error.WriteLine("Cách dùng: vformat <vào.docx> <ra.docx> [--standard nd30|tt68|hd05|hd29|nd250|cv5512] [--report báo-cáo.md]");
+                Console.Error.WriteLine("Cách dùng: vformat <vào.docx> <ra.docx> [--standard nd30|tt68|ca08|hd05|hd29|nd250|cv5512] [--report báo-cáo.md]");
                 return 2;
             }
             pos.Remove(Opt("--standard")); pos.Remove(Opt("--report"));
@@ -34,6 +34,7 @@ namespace VFormat.Cli
                 case "hd29": force = StandardKind.Doan_HD29; break;
                 case "nd250": force = StandardKind.PhapDien_ND250; break;
                 case "cv5512": force = StandardKind.GiaoDuc_CV5512; break;
+                case "ca08": force = StandardKind.CongAn_BCA08; break;
             }
             var report = DocxFormatter.Run(pos[0], pos[1], new FormatOptions { Standard = force }).Report;
             var reportPath = Opt("--report");

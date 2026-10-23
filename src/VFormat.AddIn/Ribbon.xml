@@ -11,7 +11,7 @@
           <dropDown id="ddStandard" label="Quy chuẩn" sizeString="WWWWWWWWWWWWWWWWWWWWW"
                     getItemCount="GetItemCount" getItemLabel="GetItemLabel" getItemID="GetItemID"
                     getSelectedItemIndex="GetSelectedItemIndex" onAction="OnSelect"
-                    supertip="Tự nhận diện hoặc chọn hệ quy chuẩn: NĐ 30, TT 68, HD 05, HD 29, Pháp điển, CV 5512." />
+                    supertip="Tự nhận diện hoặc chọn hệ quy chuẩn: NĐ 30, TT 68, Công an (08/VBHN-BCA), HD 05, HD 29, Pháp điển, CV 5512." />
           <dropDown id="ddSize" label="Cỡ chữ" sizeString="WWWWW"
                     getItemCount="GetItemCount" getItemLabel="GetItemLabel" getItemID="GetItemID"
                     getSelectedItemIndex="GetSelectedItemIndex" onAction="OnSelect" />

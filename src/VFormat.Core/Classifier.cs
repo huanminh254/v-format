@@ -243,12 +243,16 @@ namespace VFormat.Core
         static bool IsHeadingLike(string s) =>
             s.Length <= 160 && !Regex.IsMatch(s, @"[\.;,]$");
 
+        public static readonly Regex RxRank = new Regex(@"^(Đại|Thượng|Trung|Thiếu)\s+(tướng|tá|úy|uý)\s+");
+
+        public static bool HasRank(string s) => RxRank.IsMatch(TextUtil.Clean(s));
+
         public static bool IsPersonName(string s)
         {
             s = TextUtil.Clean(s);
             if (s.Length == 0 || s.Length > 50 || Regex.IsMatch(s, @"[\d:;,\.\(\)/]")) return false;
-            // cấp bậc quân hàm đứng trước họ tên (TT 68)
-            s = Regex.Replace(s, @"^(Đại|Thượng|Trung|Thiếu)\s+(tướng|tá|úy|uý)\s+", "");
+            // cấp bậc hàm đứng trước họ tên (Quân đội TT 68, Công an 08/VBHN-BCA)
+            s = RxRank.Replace(s, "");
             var words = s.Split(' ');
             if (words.Length < 2 || words.Length > 7) return false;
             return words.All(w => w.Length > 0 && char.IsUpper(w[0]));
