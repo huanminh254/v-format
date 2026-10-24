@@ -4,7 +4,7 @@
     <LangVersion>latest</LangVersion>
     <RootNamespace>VFormat.AddIn</RootNamespace>
     <AssemblyName>VFormat.AddIn</AssemblyName>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <!-- COM add-in: đăng ký bằng installer/install.ps1 (per-user, không cần quyền admin) -->
     <ComVisible>false</ComVisible>
