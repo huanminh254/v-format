@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using VFormat.Core;
 using Word = Microsoft.Office.Interop.Word;
@@ -30,8 +31,12 @@ namespace VFormat.AddIn
         public static Word.Table ReplaceWithTable(Word.Document doc, int start, int end, IList<string> left, IList<string> right,
             float leftMm, float rightMm)
         {
+            // Khối ở cuối tài liệu (chữ ký): không xóa dấu đoạn cuối, nếu không Word gộp ngược
+            // làm tài liệu ngắn lại và vị trí start nằm ngoài tài liệu ("Value out of range")
+            end = Math.Min(end, doc.Content.End - 1);
             var region = doc.Range(start, end);
             region.Delete();
+            start = Math.Min(start, doc.Content.End - 1);
             var at = doc.Range(start, start);
             at.InsertParagraphBefore();
             return InsertTable(doc, doc.Range(start, start), left, right, leftMm, rightMm);
@@ -98,6 +103,21 @@ namespace VFormat.AddIn
         static float X(Word.Range r) => Convert.ToSingle(r.Information[Word.WdInformation.wdHorizontalPositionRelativeToPage]);
         static float Y(Word.Range r) => Convert.ToSingle(r.Information[Word.WdInformation.wdVerticalPositionRelativeToPage]);
 
+        /// <summary>Độ rộng (pt) của chữ khi in bằng phông đã cho.</summary>
+        static float MeasurePt(string text, string fontName, float size, bool bold, bool italic)
+        {
+            text = (text ?? "").TrimEnd('\r', '\a', '\v', ' ');
+            if (text.Length == 0) return 0;
+            var style = (bold ? FontStyle.Bold : FontStyle.Regular) | (italic ? FontStyle.Italic : FontStyle.Regular);
+            using (var bmp = new Bitmap(1, 1))
+            using (var g = Graphics.FromImage(bmp))
+            using (var font = new Font(fontName, size, style, GraphicsUnit.Point))
+            {
+                g.PageUnit = GraphicsUnit.Point;
+                return g.MeasureString(text, font, PointF.Empty, StringFormat.GenericTypographic).Width;
+            }
+        }
+
         static bool DrawUnder(Word.Document doc, Word.Paragraph para, string rawText, float ratio, int n)
         {
             var pr = para.Range;
@@ -115,11 +135,45 @@ namespace VFormat.AddIn
                 int mid = (lo + hi) / 2;
                 if (Math.Abs(Y(doc.Range(mid, mid)) - yEnd) < 1) hi = mid; else lo = mid + 1;
             }
-            float x1 = X(doc.Range(lo, lo)), x2 = X(endR);
-            if (x2 <= x1) return false;
+            // Tọa độ ngang từng ký tự Word trả về không ổn định (lệch theo trạng thái dàn trang), nên không dùng:
+            // tâm = giữa vùng chứa đoạn (ô bảng / khoảng giữa hai lề), độ dài = đo chữ dòng cuối theo phông của đoạn.
+            var lastLine = doc.Range(lo, end);
+            var font = lastLine.Font;
+            float size = font.Size >= 9999999 ? (pr.Font.Size >= 9999999 ? 13 : pr.Font.Size) : font.Size;
+            float textW = MeasurePt(lastLine.Text, string.IsNullOrEmpty(font.Name) ? "Times New Roman" : font.Name,
+                size, font.Bold == -1 || font.Bold == 1, font.Italic == -1 || font.Italic == 1);
+            if (textW <= 0) return false;
 
-            float size = pr.Font.Size >= 9999999 ? 13 : pr.Font.Size;
+            var pf = para.Format;
+            float boxLeft = X(doc.Range(start, start)); // ở đầu đoạn Word báo đúng mép lề / mép ô (chưa cộng thụt lề)
+            float boxWidth;
+            if ((bool)pr.Information[Word.WdInformation.wdWithInTable])
+                boxWidth = pr.Cells[1].Width - pr.Cells[1].LeftPadding - pr.Cells[1].RightPadding;
+            else
+            {
+                var ps = pr.Sections[1].PageSetup;
+                boxWidth = ps.PageWidth - ps.LeftMargin - ps.RightMargin;
+            }
+            float innerL = boxLeft + pf.LeftIndent, innerR = boxLeft + boxWidth - pf.RightIndent;
+            float x1, x2;
+            if (pf.Alignment == Word.WdParagraphAlignment.wdAlignParagraphCenter)
+            {
+                float c = (innerL + innerR) / 2;
+                x1 = c - textW / 2; x2 = c + textW / 2;
+            }
+            else if (pf.Alignment == Word.WdParagraphAlignment.wdAlignParagraphRight) { x2 = innerR; x1 = x2 - textW; }
+            else { x1 = innerL + (lo == start ? pf.FirstLineIndent : 0); x2 = x1 + textW; }
+
             float y = yEnd + size * 1.2f + 1f;
+
+            // Đoạn kế sát ngay dưới (trích yếu → chức vụ ký): thêm khoảng cách sau để đường kẻ không đè lên chữ
+            var next = para.Next();
+            if (next != null)
+            {
+                float yNext = Y(doc.Range(next.Range.Start, next.Range.Start));
+                float need = (float)Math.Ceiling(y + 4f - yNext);
+                if (yNext > yEnd && need > 0) para.SpaceAfter += need;
+            }
             float w = (x2 - x1) * ratio, left = (x1 + x2) / 2 - w / 2;
 
             var shape = doc.Shapes.AddLine(left, y, left + w, y, pr);

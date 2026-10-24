@@ -38,7 +38,8 @@ $dll = Join-Path $target "VFormat.AddIn.dll"
 $asmName = [System.Reflection.AssemblyName]::GetAssemblyName($dll)
 $assembly = $asmName.FullName
 $version = $asmName.Version.ToString()
-$codeBase = ([Uri]$dll).AbsoluteUri
+# Không dùng [Uri].AbsoluteUri: nó mã hóa %XX ký tự có dấu (tên người dùng tiếng Việt) và CLR không tìm thấy file
+$codeBase = "file:///" + ($dll -replace '\\', '/')
 
 $classes = @(
     @{ Clsid = "{FA30749A-6CEA-4764-8B98-CA6CCD4F03C8}"; ProgId = "VFormat.Connect";       Type = "VFormat.AddIn.Connect";       Control = $false },

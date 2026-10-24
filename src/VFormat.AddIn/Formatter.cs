@@ -131,7 +131,7 @@ namespace VFormat.AddIn
                 ("[ ]{2,}", " "),
                 ("[ ]{1,}([,;:\\?\\!\\)])", "\\1"),
                 ("[ ]{1,}(.)([!.])", "\\1\\2"),   // dấu chấm đơn; giữ " ..." (chỗ để trống)
-                ("(\\()[ ]{1,}", "\\1"),
+                ("([\\(])[ ]{1,}", "\\1"),        // Word từ chối "(\()": dấu ngoặc phải nằm trong [ ]
             };
             foreach (var (find, repl) in rx)
             {
