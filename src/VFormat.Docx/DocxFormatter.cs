@@ -14,6 +14,7 @@ namespace VFormat.Docx
         public StandardKind? Standard;     // null = tự nhận diện
         public float BodySize = 14;
         public float LineSpacing = 1.15f;
+        public bool FixSpelling = true;    // Tự động sửa lỗi chính tả & chuẩn hóa dấu thanh
     }
 
     public class FormatResult
@@ -96,17 +97,21 @@ namespace VFormat.Docx
                     m = DocxModel.Read(doc); cd = Classifier.Classify(m.Infos, p.Kind);
                 }
 
-                int fixes = 0;
+                int fixes = 0, spellFixes = 0;
+                var sc = options.FixSpelling ? new SpellChecker() : null;
                 for (int i = 0; i < cd.Kinds.Count; i++)
                 {
-                    if (!Planner.NeedsTextFix(cd, i, p)) continue;
                     if (m.Infos[i].InTable && cd.Kinds[i] == ElementKind.ThongTinDau) continue;
-                    var raw = m.Infos[i].Text;
-                    var clean = TextUtil.Clean(raw);
-                    var fixedText = Planner.FixText(cd, i, p, clean);
-                    if (fixedText.Length == 0 || fixedText == raw) continue;
-                    DocxWriter.SetText(m.Paras[i], fixedText); fixes++;
+                    if (Planner.NeedsTextFix(cd, i, p))
+                    {
+                        var raw = m.Infos[i].Text;
+                        var fixedText = Planner.FixText(cd, i, p, TextUtil.Clean(raw));
+                        if (fixedText.Length > 0 && fixedText != raw) { DocxWriter.SetText(m.Paras[i], fixedText); fixes++; }
+                    }
+                    // chính tả: thay từng chỗ trong run, không ghi lại cả đoạn
+                    if (sc != null) spellFixes += DocxWriter.FixSpelling(m.Paras[i], sc);
                 }
+                if (spellFixes > 0) stats.Add($"{spellFixes} chỗ sửa chính tả");
                 var (first, last) = Planner.BodyRange(cd);
                 var (headerT, signT) = Planner.FormalTables(cd);
                 for (int i = Math.Max(first, 0); first >= 0 && i <= last; i++)

@@ -121,6 +121,8 @@ namespace VFormat.Core
             var hits = new List<SpellHit>();
             if (string.IsNullOrEmpty(text)) return hits;
             text = text.Normalize(System.Text.NormalizationForm.FormC);
+
+            // 1. Quét tập quy tắc từ điển và cụm từ ngữ cảnh
             foreach (var r in _rules)
                 foreach (Match m in r.Pattern.Matches(text))
                 {
@@ -133,8 +135,36 @@ namespace VFormat.Core
                         Found = m.Value, Suggestion = sug, Reason = r.Reason,
                     });
                 }
+
+            // 2. Vị trí đặt dấu thanh kiểu mới (QĐ 1989/QĐ-BGDĐT) trên từng âm tiết
+            foreach (var t in ToneHits(text, newStyle: true, paragraphIndex))
+                if (!hits.Any(h => t.Start < h.Start + h.Length && h.Start < t.Start + t.Length)) hits.Add(t);
+
             return hits.OrderBy(h => h.Start).ToList();
         }
+
+        /// <summary>Các âm tiết cần đặt lại dấu thanh theo kiểu mới (hòa, thủy) hoặc kiểu cũ (hoà, thuỷ).</summary>
+        public static List<SpellHit> ToneHits(string text, bool newStyle, int paragraphIndex = 0)
+        {
+            var hits = new List<SpellHit>();
+            if (string.IsNullOrEmpty(text)) return hits;
+            text = text.Normalize(System.Text.NormalizationForm.FormC);
+            foreach (Match m in Regex.Matches(text, @"[\p{L}\p{M}]+"))
+            {
+                var fixedWord = TonePlacementValidator.PlaceTone(m.Value, newStyle);
+                if (fixedWord == m.Value) continue;
+                hits.Add(new SpellHit
+                {
+                    ParagraphIndex = paragraphIndex, Start = m.Index, Length = m.Length,
+                    Found = m.Value, Suggestion = fixedWord, Reason = "Sai vị trí đặt dấu thanh",
+                });
+            }
+            return hits;
+        }
+
+        /// <summary>Chuyển đổi vị trí dấu thanh toàn bài: newStyle=true (hòa, tòa, thủy), false (hoà, toà, thuỷ).</summary>
+        public static string ConvertToneMarks(string text, bool newStyle = true) =>
+            TonePlacementValidator.NormalizeAll(text, newStyle);
 
         /// <summary>Áp dụng mọi gợi ý vào chuỗi.</summary>
         public string Apply(string text)

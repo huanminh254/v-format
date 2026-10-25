@@ -11,5 +11,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\VFormat.Core\VFormat.Core.csproj" />
+    <ProjectReference Include="..\..\src\VFormat.Docx\VFormat.Docx.csproj" />
   </ItemGroup>
 </Project>

@@ -19,6 +19,7 @@ namespace VFormat.App
         static readonly Color Soft = Color.FromArgb(243, 246, 250);
 
         ComboBox _standard, _size, _spacing;
+        CheckBox _fixSpelling;
         RadioButton _sameFolder, _otherFolder;
         TextBox _folder, _diaDanh;
         Panel _drop;
@@ -77,7 +78,7 @@ namespace VFormat.App
             var page = new TabPage("  Chuẩn hóa văn bản  ") { BackColor = Color.White, Padding = new Padding(12) };
 
             // --- tùy chọn
-            var opts = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, ColumnCount = 6, Padding = new Padding(0, 0, 0, 6) };
+            var opts = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, ColumnCount = 7, Padding = new Padding(0, 0, 0, 6) };
             _standard = Combo(260, new[] { "Tự nhận diện" }.Concat(Profiles.All.Select(StandardLabel)).ToArray());
             _size = Combo(70, "14", "13");
             _spacing = Combo(70, "1.15", "1.0", "1.3", "1.5");
@@ -87,6 +88,8 @@ namespace VFormat.App
             opts.Controls.Add(_size);
             opts.Controls.Add(Caption("Giãn dòng"));
             opts.Controls.Add(_spacing);
+            _fixSpelling = new CheckBox { Text = "Sửa lỗi chính tả & dấu thanh", Checked = true, AutoSize = true, Margin = new Padding(12, 6, 0, 0) };
+            opts.Controls.Add(_fixSpelling);
 
             var outRow = new FlowLayoutPanel { Dock = DockStyle.Top, AutoSize = true, WrapContents = false, Padding = new Padding(0, 0, 0, 8) };
             _sameFolder = new RadioButton { Text = "Lưu cạnh tệp gốc (thêm \"_chuan\")", AutoSize = true, Checked = true, Margin = new Padding(0, 6, 16, 0) };
@@ -221,6 +224,7 @@ namespace VFormat.App
             Standard = _standard.SelectedIndex <= 0 ? (StandardKind?)null : Profiles.All[_standard.SelectedIndex - 1],
             BodySize = float.Parse((string)_size.SelectedItem, System.Globalization.CultureInfo.InvariantCulture),
             LineSpacing = float.Parse((string)_spacing.SelectedItem, System.Globalization.CultureInfo.InvariantCulture),
+            FixSpelling = _fixSpelling.Checked,
         };
 
         // ================= Kéo thả / chọn tệp =================

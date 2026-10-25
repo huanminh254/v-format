@@ -6,8 +6,8 @@ namespace VFormat.Core
 {
     /// <summary>
     /// Kiểm tra và sửa vị trí đặt dấu thanh tiếng Việt theo kiểu mới
-    /// (QĐ 1989/QĐ-BGDĐT Điều 9: "hòa", "thúy" thay vì "hoà", "thuý").
-    /// Cũng chuẩn hoá hai biến thể hoà/hòa trong NFC Unicode.
+    /// (QĐ 1989/QĐ-BGDĐT Điều 9: "hòa", "thúy" thay vì "hoà", "thuý"), hoặc chuyển sang kiểu cũ.
+    /// Dựa trên cấu trúc âm tiết: phụ âm đầu (kể cả qu, gi) + cụm nguyên âm + âm cuối.
     /// </summary>
     public static class TonePlacementValidator
     {
@@ -15,19 +15,9 @@ namespace VFormat.Core
         static readonly Dictionary<char, (char baseChar, int tone)> ToneMap;
         static readonly Dictionary<string, char> ReverseToneMap;
 
-        // Biến thể vị trí dấu kiểu cũ ↔ kiểu mới (sau NFC). Kiểu mới ở bên trái.
-        static readonly Dictionary<string, string> ToneVariantMap = new Dictionary<string, string>
-        {
-            {"óa","oá"}, {"oá","óa"}, {"òa","oà"}, {"oà","òa"},
-            {"ỏa","oả"}, {"oả","ỏa"}, {"õa","oã"}, {"oã","õa"},
-            {"ọa","oạ"}, {"oạ","ọa"},
-            {"óe","oé"}, {"oé","óe"}, {"òe","oè"}, {"oè","òe"},
-            {"ỏe","oẻ"}, {"oẻ","ỏe"}, {"õe","oẽ"}, {"oẽ","õe"},
-            {"ọe","oẹ"}, {"oẹ","ọe"},
-            {"úy","uý"}, {"uý","úy"}, {"ùy","uỳ"}, {"uỳ","ùy"},
-            {"ủy","uỷ"}, {"uỷ","ủy"}, {"ũy","uỹ"}, {"uỹ","ũy"},
-            {"ụy","uỵ"}, {"uỵ","ụy"},
-        };
+        // Nguyên âm có mũ/móc: nếu âm tiết có, dấu thanh luôn đặt ở đó (ươ → ơ).
+        const string MarkedVowels = "ăâêôơư";
+        static readonly HashSet<string> Codas = new HashSet<string> { "c", "ch", "m", "n", "ng", "nh", "p", "t" };
 
         static TonePlacementValidator()
         {
@@ -90,87 +80,92 @@ namespace VFormat.Core
         }
 
         /// <summary>
-        /// Kiểm tra âm tiết đặt dấu thanh đúng chỗ (kiểu mới QĐ 1989). Trả về true nếu đúng;
+        /// Vị trí đặt dấu thanh đúng của âm tiết baseWord (đã bỏ dấu thanh), -1 nếu không phải một âm tiết tiếng Việt
+        /// (từ dính liền, từ nước ngoài...). newStyle: oa/oe/uy không có âm cuối đặt dấu ở nguyên âm đầu (hòa, thủy);
+        /// kiểu cũ đặt ở nguyên âm sau (hoà, thuỷ).
+        /// </summary>
+        static int TonePosition(string baseWord, bool newStyle)
+        {
+            var w = baseWord.ToLowerInvariant();
+            bool IsVowel(int i) => i < w.Length && ToneMap.ContainsKey(w[i]);
+
+            int start = 0;
+            while (start < w.Length && !IsVowel(start)) start++;
+            if (start == w.Length) return -1;
+            int end = start;
+            while (end < w.Length && IsVowel(end)) end++;
+            for (int i = end; i < w.Length; i++) if (IsVowel(i)) return -1;   // hai cụm nguyên âm: từ dính liền
+            for (int i = 0; i < start; i++) if (!char.IsLetter(w[i])) return -1;
+            var coda = w.Substring(end);
+            if (coda.Length > 0 && !Codas.Contains(coda)) return -1;
+
+            // "qu", "gi" là phụ âm đầu: u/i không phải nguyên âm (quả, quyết, giữa) — trừ "gì", "gìn".
+            if (start > 0 && end - start >= 2 &&
+                ((w[start - 1] == 'q' && w[start] == 'u') || (start == 1 && w[0] == 'g' && w[start] == 'i')))
+                start++;
+
+            int n = end - start;
+            if (n == 1) return start;
+            if (n > 3) return -1;
+
+            int marked = -1;
+            for (int i = start; i < end; i++)
+                if (MarkedVowels.IndexOf(w[i]) >= 0) marked = i;     // ươ: lấy ơ (đứng sau)
+            if (marked >= 0) return marked;
+
+            if (coda.Length > 0) return end - 1;                     // hoàng, toán, huýt
+            if (n == 3) return start + 1;                            // loại, khuỷu, ngoẻo
+            var pair = w.Substring(start, 2);
+            if (pair == "oa" || pair == "oe" || pair == "uy") return newStyle ? start : start + 1;
+            return start;                                            // tài, cháo, mùa, kìa, túi
+        }
+
+        /// <summary>Đặt lại dấu thanh của một âm tiết; trả về nguyên từ nếu không có dấu hoặc không xác định được.</summary>
+        public static string PlaceTone(string word, bool newStyle = true)
+        {
+            if (string.IsNullOrEmpty(word)) return word;
+            int tone = ExtractTone(word, out var baseWord, out var tonePos);
+            if (tone == 0) return word;
+            int marks = 0;
+            foreach (var ch in word)
+                if (ToneMap.TryGetValue(char.ToLowerInvariant(ch), out var v) && v.tone > 0) marks++;
+            if (marks > 1) return word;
+            int pos = TonePosition(baseWord, newStyle);
+            if (pos < 0 || pos == tonePos) return word;
+            return ApplyTone(baseWord, tone, pos);
+        }
+
+        /// <summary>
+        /// Kiểm tra âm tiết đặt dấu thanh đúng chỗ (kiểu mới: hòa, thủy). Trả về true nếu đúng;
         /// nếu sai, correctedWord chứa phiên bản đúng.
         /// </summary>
         public static bool IsTonePlacedProperly(string word, out string correctedWord)
         {
-            correctedWord = word;
-            if (string.IsNullOrEmpty(word)) return true;
-            int tone = ExtractTone(word, out var baseWord, out var tonePos);
-            if (tone == 0 || tonePos == -1) return true;
-
-            var vowels = new List<int>();
-            for (int i = 0; i < baseWord.Length; i++)
-                if (ToneMap.ContainsKey(char.ToLowerInvariant(baseWord[i]))) vowels.Add(i);
-            if (vowels.Count <= 1) return true;
-
-            int last = vowels[vowels.Count - 1];
-            bool consonantAfter = last < baseWord.Length - 1;
-            int correctPos = tonePos;
-
-            if (vowels.Count == 2)
-            {
-                char v0 = char.ToLowerInvariant(baseWord[vowels[0]]);
-                char v1 = char.ToLowerInvariant(baseWord[vowels[1]]);
-                if (consonantAfter) correctPos = vowels[1];
-                else
-                {
-                    // Kiểu mới (thẩm mỹ): ia/ua/ưa, oa/oe, uy đặt dấu ở nguyên âm đầu.
-                    bool firstVowel =
-                        (v0 == 'i' && v1 == 'a') || (v0 == 'u' && v1 == 'a') || (v0 == 'ư' && v1 == 'a') ||
-                        (v0 == 'o' && v1 == 'a') || (v0 == 'o' && v1 == 'e') || (v0 == 'u' && v1 == 'y');
-                    if (!firstVowel) return true;
-                    correctPos = vowels[0];
-                }
-            }
-            else if (vowels.Count == 3)
-            {
-                correctPos = vowels[1];
-            }
-
-            if (tonePos != correctPos)
-            {
-                correctedWord = ApplyTone(baseWord, tone, correctPos);
-                return false;
-            }
-            return true;
+            correctedWord = PlaceTone(word, newStyle: true);
+            return correctedWord == word;
         }
 
         /// <summary>
-        /// Trả về biến thể vị trí dấu kiểu cũ của từ (ví dụ "hòa" → "hoà"), null nếu không đổi được.
-        /// Dùng để so khớp văn bản gõ theo chuẩn cũ.
+        /// Trả về biến thể vị trí dấu kiểu còn lại của từ (ví dụ "hòa" ↔ "hoà"), null nếu từ không có hai cách đặt dấu.
         /// </summary>
         public static string GetAlternativeTonePlacement(string word)
         {
             if (string.IsNullOrEmpty(word)) return null;
-            var lower = word.ToLowerInvariant();
-            foreach (var kv in ToneVariantMap)
-            {
-                int idx = lower.IndexOf(kv.Key, System.StringComparison.Ordinal);
-                if (idx < 0) continue;
-                if (idx > 0 && lower[idx - 1] == 'q') continue; // "quá" không áp dụng
-                var replaced = lower.Substring(0, idx) + kv.Value + lower.Substring(idx + kv.Key.Length);
-                if (char.IsUpper(word[0]))
-                {
-                    if (word.Length > 1 && char.IsUpper(word[1])) return replaced.ToUpperInvariant();
-                    return char.ToUpperInvariant(replaced[0]) + (replaced.Length > 1 ? replaced.Substring(1) : "");
-                }
-                return replaced;
-            }
+            word = word.Normalize(NormalizationForm.FormC);
+            var newer = PlaceTone(word, true);
+            var older = PlaceTone(word, false);
+            if (newer == older) return null;
+            if (word == newer) return older;
+            if (word == older) return newer;
             return null;
         }
 
-        /// <summary>Trả về chuỗi với mọi âm tiết đặt dấu lại đúng theo QĐ 1989.</summary>
-        public static string NormalizeAll(string text)
+        /// <summary>Trả về chuỗi với mọi âm tiết đặt dấu lại theo kiểu mới (newStyle) hoặc kiểu cũ.</summary>
+        public static string NormalizeAll(string text, bool newStyle = true)
         {
             if (string.IsNullOrEmpty(text)) return text ?? "";
             text = text.Normalize(NormalizationForm.FormC);
-            return Regex.Replace(text, @"[\p{L}\p{M}]+", m =>
-            {
-                IsTonePlacedProperly(m.Value, out var fixedWord);
-                return fixedWord;
-            });
+            return Regex.Replace(text, @"[\p{L}\p{M}]+", m => PlaceTone(m.Value, newStyle));
         }
     }
 }

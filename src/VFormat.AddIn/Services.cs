@@ -132,6 +132,35 @@ namespace VFormat.AddIn
             return items;
         }
 
+        /// <summary>
+        /// Đặt lại dấu thanh toàn văn bản (kiểu mới hòa/thủy hoặc kiểu cũ hoà/thuỷ). Chỉ thay đúng từng từ,
+        /// không ghi lại cả đoạn — giữ định dạng ký tự, dấu đoạn và cấu trúc bảng. Trả về số từ đã đổi.
+        /// </summary>
+        public static int ConvertTones(Word.Application app, Word.Document doc, bool newStyle)
+        {
+            int count = 0;
+            using (new WordBatch(app, newStyle ? "V-Format: Dấu thanh kiểu mới" : "V-Format: Dấu thanh kiểu cũ"))
+            {
+                var paragraphs = doc.Paragraphs.Cast<Word.Paragraph>().ToList();
+                for (int pi = paragraphs.Count - 1; pi >= 0; pi--)
+                {
+                    var pr = paragraphs[pi].Range;
+                    var raw = pr.Text ?? "";
+                    var hits = SpellChecker.ToneHits(raw, newStyle, pi);
+                    if (hits.Count == 0) continue;
+                    bool nfc = raw.IsNormalized(NormalizationForm.FormC);
+                    foreach (var h in hits.OrderByDescending(h => h.Start))
+                    {
+                        var r = Locate(doc, pr, h, nfc);
+                        if (r == null) continue;
+                        r.Text = h.Suggestion;
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+
         static Word.Range Locate(Word.Document doc, Word.Range para, SpellHit h, bool nfc)
         {
             if (nfc)

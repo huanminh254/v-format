@@ -114,6 +114,12 @@ namespace VFormat.AddIn
                 case "btnSpellFix":
                     if (Confirm("Tự động sửa mọi lỗi chính tả V-Format phát hiện được? (có thể Undo)")) RunSpell(true);
                     break;
+                case "btnToneNew":
+                    Status($"Đã đổi {Spell.ConvertTones(_app, Doc(), newStyle: true)} từ sang dấu thanh kiểu mới (hòa, tòa, thủy, ủy...).");
+                    break;
+                case "btnToneOld":
+                    Status($"Đã đổi {Spell.ConvertTones(_app, Doc(), newStyle: false)} từ sang dấu thanh kiểu cũ (hoà, toà, thuỷ, uỷ...).");
+                    break;
                 case "btnDict": OpenDictionary(); break;
                 case "btnSaveTemplate": SaveTemplate(); break;
                 case "btnTemplateFolder":

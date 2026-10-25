@@ -560,6 +560,56 @@ namespace VFormat.Docx
             p.AppendChild(run);
         }
 
+        /// <summary>
+        /// Sửa chính tả ngay trong các run của đoạn: chỉ thay đúng chuỗi lỗi, giữ định dạng ký tự (đậm, nghiêng...),
+        /// tab, ngắt dòng, trường. Lỗi nằm vắt qua nhiều run thì gợi ý lấy định dạng của run đầu; lỗi vắt qua tab/ngắt
+        /// dòng thì bỏ qua. Trả về số chỗ đã sửa.
+        /// </summary>
+        public static int FixSpelling(Paragraph p, SpellChecker sc)
+        {
+            var segs = new List<(Text node, int start, int length)>();
+            var sb = new StringBuilder();
+            foreach (var e in p.Descendants())
+            {
+                if (e is Text t)
+                {
+                    if (!t.Text.IsNormalized(NormalizationForm.FormC)) t.Text = t.Text.Normalize(NormalizationForm.FormC);
+                    segs.Add((t, sb.Length, t.Text.Length));
+                    sb.Append(t.Text);
+                }
+                else if (e is TabChar) sb.Append('\t');
+                else if (e is Break) sb.Append('\n');
+            }
+            var text = sb.ToString();
+            if (text.Trim().Length == 0) return 0;
+
+            int n = 0;
+            // từ cuối lên: phần đầu của mỗi node (trước chỗ đã sửa) giữ nguyên vị trí
+            foreach (var h in sc.Check(text).OrderByDescending(h => h.Start))
+            {
+                int end = h.Start + h.Length;
+                var covered = segs.Where(s => s.start < end && h.Start < s.start + s.length).ToList();
+                int inText = covered.Sum(s => Math.Min(end, s.start + s.length) - Math.Max(h.Start, s.start));
+                if (covered.Count == 0 || inText != h.Length) continue;
+
+                // gợi ý dài bằng chuỗi lỗi (đề suất → đề xuất): mỗi run giữ đúng phần ký tự của nó, kể cả định dạng;
+                // khác độ dài: cả gợi ý vào run đầu, các run sau bỏ phần thuộc lỗi
+                bool sameLength = h.Suggestion.Length == h.Length;
+                for (int k = 0; k < covered.Count; k++)
+                {
+                    var s = covered[k];
+                    int from = Math.Max(h.Start, s.start) - s.start;
+                    int to = Math.Min(end, s.start + s.length) - s.start;
+                    string put = sameLength ? h.Suggestion.Substring(s.start + from - h.Start, to - from)
+                                            : k == 0 ? h.Suggestion : "";
+                    s.node.Text = s.node.Text.Substring(0, from) + put + s.node.Text.Substring(to);
+                    s.node.Space = SpaceProcessingModeValues.Preserve;
+                }
+                n++;
+            }
+            return n;
+        }
+
         /// <summary>Chèn đoạn mới chứa <paramref name="text"/> ngay sau đoạn p (giữ định dạng đoạn của p).</summary>
         public static Paragraph InsertParagraphAfter(Paragraph p, string text)
         {

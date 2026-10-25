@@ -81,6 +81,8 @@
         <group id="grpSpell" label="Chính tả Offline">
           <button id="btnSpell" label="Kiểm tra chính tả" size="large" imageMso="SpellingAndGrammar" onAction="OnAction" />
           <button id="btnSpellFix" label="Sửa tự động" imageMso="AutoCorrect" onAction="OnAction" />
+          <button id="btnToneNew" label="Dấu mới (hòa, thủy)" imageMso="FontColorCycle" supertip="Chuẩn hóa vị trí dấu thanh kiểu mới (hòa, tòa, thủy, ủy...) theo QĐ 1989/QĐ-BGDĐT." onAction="OnAction" />
+          <button id="btnToneOld" label="Dấu cũ (hoà, thuỷ)" imageMso="FontColorCycle" supertip="Chuyển đổi vị trí dấu thanh sang kiểu cũ (hoà, toà, thuỷ, uỷ...)." onAction="OnAction" />
           <button id="btnDict" label="Từ điển riêng" imageMso="ReviewThesaurus" onAction="OnAction" />
         </group>
 
