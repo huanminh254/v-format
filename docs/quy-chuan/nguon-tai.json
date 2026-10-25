@@ -1,0 +1,141 @@
+[
+  {
+    "file": "01-ND30-2020.pdf",
+    "url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2020/03/30.signed.pdf",
+    "resolved_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2020/03/30.signed.pdf",
+    "size_bytes": 3027818,
+    "sha256": "be2514460c953141923579e4a0ddd0249c611643a59514976790dc1d90589178",
+    "content_type": "application/pdf",
+    "retrieved_date": "2026-10-24",
+    "tls_note": null,
+    "pdf_pages": 76,
+    "pdf_signature_field_names": [
+      "Signature1"
+    ]
+  },
+  {
+    "file": "03-VBHN08-BCA-2021.pdf",
+    "url": "https://congan.gialai.gov.vn/vi/laws/detail/Van-ban-hop-nhat-Thong-tu-quy-dinh-ve-cong-tac-van-thu-trong-Cong-an-nhan-dan-17/?download=1&id=0",
+    "resolved_url": "https://congan.gialai.gov.vn/vi/laws/detail/Van-ban-hop-nhat-Thong-tu-quy-dinh-ve-cong-tac-van-thu-trong-Cong-an-nhan-dan-17/?download=1&id=0",
+    "size_bytes": 2328252,
+    "sha256": "19172fe85186a4ecb408e9df3e8d8fbaad96cf8d8c1ea42b4accce2c25c62093",
+    "content_type": "application/pdf",
+    "retrieved_date": "2026-10-24",
+    "tls_note": "Server certificate chain could not be validated; public download retrieved with TLS certificate verification disabled.",
+    "pdf_pages": 36,
+    "pdf_signature_field_names": []
+  },
+  {
+    "file": "04-HD05-VPTW-2026.pdf",
+    "url": "https://tulieuvankien.dangcongsan.vn/upload/2006988/20260529/HD_05_VPTW_e1550.pdf",
+    "resolved_url": "https://tulieuvankien.dangcongsan.vn/upload/2006988/20260529/HD_05_VPTW_e1550.pdf",
+    "size_bytes": 1523354,
+    "sha256": "53bb4bc543cd1f19e0f60c861364ceab9c425bc54325c04be6a3ac99108650c5",
+    "content_type": "application/pdf",
+    "retrieved_date": "2026-10-24",
+    "tls_note": null,
+    "pdf_pages": 36,
+    "pdf_signature_field_names": [
+      "Signature1",
+      "Signature2"
+    ]
+  },
+  {
+    "file": "05-HD29-TWDTN-VP-2013.pdf",
+    "url": "https://hcmyu.hpu2.edu.vn/public/fileupload/source/Tai%20lieu/The%20thuc%20van%20ban%20cua%20Do%C3%A0n.pdf",
+    "resolved_url": "https://hcmyu.hpu2.edu.vn/public/fileupload/source/Tai%20lieu/The%20thuc%20van%20ban%20cua%20Do%C3%A0n.pdf",
+    "size_bytes": 377665,
+    "sha256": "c2814211981bedd699cdc06a1988fb08aa207babf7ae3eb688b574badf673307",
+    "content_type": "application/pdf",
+    "retrieved_date": "2026-10-24",
+    "tls_note": null,
+    "pdf_pages": 21,
+    "pdf_signature_field_names": []
+  },
+  {
+    "file": "05-HD29-TWDTN-VP-2013.doc",
+    "url": "https://yu.ctu.edu.vn/images/upload/vanban/dtn/tw/131029-29-HD.doc",
+    "resolved_url": "https://yu.ctu.edu.vn/images/upload/vanban/dtn/tw/131029-29-HD.doc",
+    "size_bytes": 169472,
+    "sha256": "7fd279926317dfc2570a9a053fe15570ef16ad9a0e9486dff46bb69633a0e2d2",
+    "content_type": "application/msword",
+    "retrieved_date": "2026-10-24",
+    "tls_note": null
+  },
+  {
+    "file": "06-ND250-2026.pdf",
+    "url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/250-ndcp.signed.pdf",
+    "resolved_url": "https://datafiles.chinhphu.vn/cpp/files/vbpq/2026/7/250-ndcp.signed.pdf",
+    "size_bytes": 2273613,
+    "sha256": "6f0f0ffea7ba097da9aa065c516714abdb031b107798090b09df6bbd938906b8",
+    "content_type": "application/pdf",
+    "retrieved_date": "2026-10-24",
+    "tls_note": null,
+    "pdf_pages": 60,
+    "pdf_signature_field_names": [
+      "Signature1"
+    ]
+  },
+  {
+    "file": "07-CV5512-BGDDT-GDTrH-2020.pdf",
+    "url": "https://admintruong.haiphong.shieldix.app/Data/haiphong/thcstantien/2023_6/19/cong-van-5512-bgd-2020_196202320.pdf",
+    "resolved_url": "https://admintruong.haiphong.shieldix.app/Data/haiphong/thcstantien/2023_6/19/cong-van-5512-bgd-2020_196202320.pdf",
+    "size_bytes": 1292303,
+    "sha256": "256e9e405ccc4ec1bfec4d9fcec170a033ab5b6438b0213306c6701fb8f42d83",
+    "content_type": "application/pdf",
+    "retrieved_date": "2026-10-24",
+    "tls_note": null,
+    "pdf_pages": 4,
+    "pdf_signature_field_names": [
+      "Signature1",
+      "Signature2",
+      "Signature3",
+      "Signature4",
+      "Signature5"
+    ]
+  },
+  {
+    "file": "07-CV5512-Phu-luc-I.docx",
+    "url": "https://admintruong.haiphong.shieldix.app/Data/haiphong/thcstantien/2023_6/19/phuluc1maukehoachdayhocmonhoccuato2020_196202320.docx",
+    "resolved_url": "https://admintruong.haiphong.shieldix.app/Data/haiphong/thcstantien/2023_6/19/phuluc1maukehoachdayhocmonhoccuato2020_196202320.docx",
+    "size_bytes": 26632,
+    "sha256": "cecccf95a015035453dbc9a932bee3454c873aaa6a984767f470485e233f6432",
+    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "retrieved_date": "2026-10-24",
+    "tls_note": null,
+    "document_title_excerpt": "Phụ lụ c I KHUNG KẾ HOẠCH DẠY HỌC MÔN HỌC  CỦA TỔ CHUYÊN MÔN ( Kèm theo Công văn số   5512 /BGDĐT-GDTrH ngày  18  tháng 12 năm 2020 của Bộ GDĐT ) TRƯỜNG :  ................................................................"
+  },
+  {
+    "file": "07-CV5512-Phu-luc-II.docx",
+    "url": "https://admintruong.haiphong.shieldix.app/Data/haiphong/thcstantien/2023_6/19/phuluc2maukehoachtochuchoatdonggiaoduc2020_196202320.docx",
+    "resolved_url": "https://admintruong.haiphong.shieldix.app/Data/haiphong/thcstantien/2023_6/19/phuluc2maukehoachtochuchoatdonggiaoduc2020_196202320.docx",
+    "size_bytes": 19479,
+    "sha256": "35de742754e863e6e42d60ff3a86595bd33a5605741c7f93b5818b81acdf0ecc",
+    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "retrieved_date": "2026-10-24",
+    "tls_note": null,
+    "document_title_excerpt": "Phụ lục  II KHUNG KẾ HOẠCH  TỔ CHỨC CÁC HOẠT ĐỘNG GIÁO DỤC  CỦA TỔ CHUYÊN MÔN ( Kèm theo Công văn số  5512 /BGDĐT-GDTrH ngày  18  tháng 12 năm 2020 của Bộ GDĐT ) TRƯỜNG :  ................................................"
+  },
+  {
+    "file": "07-CV5512-Phu-luc-III.docx",
+    "url": "https://admintruong.haiphong.shieldix.app/Data/haiphong/thcstantien/2023_6/19/phuluc3maukehoachgiaoduccuagiaovien202020_196202320.docx",
+    "resolved_url": "https://admintruong.haiphong.shieldix.app/Data/haiphong/thcstantien/2023_6/19/phuluc3maukehoachgiaoduccuagiaovien202020_196202320.docx",
+    "size_bytes": 19000,
+    "sha256": "eced25c06f9aaa16516c5f41366142a63941aae2c7fc58f96c63016c00109dac",
+    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "retrieved_date": "2026-10-24",
+    "tls_note": null,
+    "document_title_excerpt": "Phụ lục  III KHUNG KẾ HOẠCH GIÁO DỤC CỦA GIÁO VIÊN  ( Kèm theo Công văn số  5512 /BGDĐT-GDTrH ngày  18  tháng 12 năm 2020 của Bộ GDĐT ) TRƯỜNG :  .................................................................. TỔ:  .."
+  },
+  {
+    "file": "07-CV5512-Phu-luc-IV-Khung-ke-hoach-bai-day.docx",
+    "url": "https://admintruong.haiphong.shieldix.app/Data/haiphong/thcstantien/2023_6/19/phuluc4maukehoachbaiday2020_196202320.docx",
+    "resolved_url": "https://admintruong.haiphong.shieldix.app/Data/haiphong/thcstantien/2023_6/19/phuluc4maukehoachbaiday2020_196202320.docx",
+    "size_bytes": 26853,
+    "sha256": "473b88224d57f9bca696943f3ba0e1c363f6ab5b8cb707bdb363469cfbe2edfb",
+    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "retrieved_date": "2026-10-24",
+    "tls_note": null,
+    "document_title_excerpt": "Phụ lục  IV KHUNG  KẾ  HOẠCH BÀI DẠY ( Kèm theo Công văn số  5512 /BGDĐT-GDTrH ngày  18  tháng 12 năm 2020 của Bộ   GDĐT ) Trường: ................... Tổ: ............................ Họ và tên giáo viên: …………………… TÊN BÀ"
+  }
+]

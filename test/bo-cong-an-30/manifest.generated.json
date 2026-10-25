@@ -1,0 +1,277 @@
+{
+  "source": "/Users/huan/Downloads/BỘ CÔNG AN.docx",
+  "source_sha256": "1286bfe79bc18f174b478895c50a49bff46b7e8bb2bfe5a247b8602585cdd6c5",
+  "count": 30,
+  "items": [
+    {
+      "index": 1,
+      "file": "01-nd30-bca-letter-le-sieu-hep-arial.docx",
+      "profile": "nd30",
+      "profile_name": "Nghị định 30/2020/NĐ-CP",
+      "variant": "Letter dọc, lề siêu hẹp, Arial màu",
+      "sha256": "febf2f2451a3808041352da8dc5cc65e7b7f4cb32f070799f6542c3dfcd9f956",
+      "bytes": 40499
+    },
+    {
+      "index": 2,
+      "file": "02-nd30-bca-a4-ngang-le-lech-calibri.docx",
+      "profile": "nd30",
+      "profile_name": "Nghị định 30/2020/NĐ-CP",
+      "variant": "A4 ngang, lề lệch, Calibri cực nhỏ",
+      "sha256": "16dd46adecbbac4985bfbc60ed31421407a813632929eb76524b10f546c031e1",
+      "bytes": 40572
+    },
+    {
+      "index": 3,
+      "file": "03-nd30-bca-a5-le-am-courier-co-lon.docx",
+      "profile": "nd30",
+      "profile_name": "Nghị định 30/2020/NĐ-CP",
+      "variant": "A5 dọc, lề trái quá lớn, Courier New cỡ lớn",
+      "sha256": "0c15278887c24297a3e2d3bf3bef2e1c2662cf73afc3b56889c24917314265c5",
+      "bytes": 40522
+    },
+    {
+      "index": 4,
+      "file": "04-nd30-bca-legal-le-rong-tahoma-co-nho.docx",
+      "profile": "nd30",
+      "profile_name": "Nghị định 30/2020/NĐ-CP",
+      "variant": "Legal dọc, lề dưới rộng, Tahoma cỡ nhỏ",
+      "sha256": "53ae56be4a77657837bec170838d1f888edbc856a08dfb00891bd73ab54e26c7",
+      "bytes": 40541
+    },
+    {
+      "index": 5,
+      "file": "05-nd30-bca-vuong-200mm-verdana-mau-sac.docx",
+      "profile": "nd30",
+      "profile_name": "Nghị định 30/2020/NĐ-CP",
+      "variant": "Trang vuông 200 mm, lề đối nghịch, Verdana màu",
+      "sha256": "6d64ef1c2a2bdac02a13a227957f4b4599e7da7067dd761f7eb0542ab8cb2aaa",
+      "bytes": 40517
+    },
+    {
+      "index": 6,
+      "file": "06-tt68-bca-letter-le-sieu-hep-arial.docx",
+      "profile": "tt68",
+      "profile_name": "Thông tư 68/2023/TT-BQP",
+      "variant": "Letter dọc, lề siêu hẹp, Arial màu",
+      "sha256": "3118f84370598bad76de8588ffe9e0fc0b5e488e959c64f19025d439a863ee32",
+      "bytes": 40559
+    },
+    {
+      "index": 7,
+      "file": "07-tt68-bca-a4-ngang-le-lech-calibri.docx",
+      "profile": "tt68",
+      "profile_name": "Thông tư 68/2023/TT-BQP",
+      "variant": "A4 ngang, lề lệch, Calibri cực nhỏ",
+      "sha256": "3dc4f66ad84b4a6b7ce9caac02a9b0bec9f09aceeb9d00c0d1258e174cf4da89",
+      "bytes": 40495
+    },
+    {
+      "index": 8,
+      "file": "08-tt68-bca-a5-le-am-courier-co-lon.docx",
+      "profile": "tt68",
+      "profile_name": "Thông tư 68/2023/TT-BQP",
+      "variant": "A5 dọc, lề trái quá lớn, Courier New cỡ lớn",
+      "sha256": "f7f1cac1b610c6838cbb76f3dc7fc87beb09ea29d6057296d5991e6f733e7178",
+      "bytes": 40572
+    },
+    {
+      "index": 9,
+      "file": "09-tt68-bca-legal-le-rong-tahoma-co-nho.docx",
+      "profile": "tt68",
+      "profile_name": "Thông tư 68/2023/TT-BQP",
+      "variant": "Legal dọc, lề dưới rộng, Tahoma cỡ nhỏ",
+      "sha256": "792c345f7dbf4e7090024b5be2aa0d99c26e80a39ebb1840759d1b3d42bfcd43",
+      "bytes": 40500
+    },
+    {
+      "index": 10,
+      "file": "10-tt68-bca-vuong-200mm-verdana-mau-sac.docx",
+      "profile": "tt68",
+      "profile_name": "Thông tư 68/2023/TT-BQP",
+      "variant": "Trang vuông 200 mm, lề đối nghịch, Verdana màu",
+      "sha256": "b72c074a5f9c029ae379317d71cd2d2acef0fda3f9cb8c9e40d9ec255b74c93b",
+      "bytes": 40554
+    },
+    {
+      "index": 11,
+      "file": "11-ca08-bca-letter-le-sieu-hep-arial.docx",
+      "profile": "ca08",
+      "profile_name": "Văn bản hợp nhất 08/VBHN-BCA",
+      "variant": "Letter dọc, lề siêu hẹp, Arial màu",
+      "sha256": "05f3a18dc5a6988fef4680583361fe9c4fb36e8dd86b1e79aa92fb485edeaacc",
+      "bytes": 40496
+    },
+    {
+      "index": 12,
+      "file": "12-ca08-bca-a4-ngang-le-lech-calibri.docx",
+      "profile": "ca08",
+      "profile_name": "Văn bản hợp nhất 08/VBHN-BCA",
+      "variant": "A4 ngang, lề lệch, Calibri cực nhỏ",
+      "sha256": "89408a754b0caf0f42fdbe745002aab79e83d45a5e0b449afbe9244537a77d26",
+      "bytes": 40563
+    },
+    {
+      "index": 13,
+      "file": "13-ca08-bca-a5-le-am-courier-co-lon.docx",
+      "profile": "ca08",
+      "profile_name": "Văn bản hợp nhất 08/VBHN-BCA",
+      "variant": "A5 dọc, lề trái quá lớn, Courier New cỡ lớn",
+      "sha256": "1fae3fd680d5459b8ef77281b0dad2bce42817e8ddfa88070b49d27dcfd671cb",
+      "bytes": 40521
+    },
+    {
+      "index": 14,
+      "file": "14-ca08-bca-legal-le-rong-tahoma-co-nho.docx",
+      "profile": "ca08",
+      "profile_name": "Văn bản hợp nhất 08/VBHN-BCA",
+      "variant": "Legal dọc, lề dưới rộng, Tahoma cỡ nhỏ",
+      "sha256": "38bb0d1a9e8fc337be8dcc18ea995e7578ab2d509f202f5a2259e0b30d6b4bd4",
+      "bytes": 40565
+    },
+    {
+      "index": 15,
+      "file": "15-hd05-bca-letter-le-sieu-hep-arial.docx",
+      "profile": "hd05",
+      "profile_name": "Hướng dẫn 05-HD/VPTW",
+      "variant": "Letter dọc, lề siêu hẹp, Arial màu",
+      "sha256": "7f089750088106e2a39f01825a807d55d2bcfdf4e7ce3a2813f93f1bbda7fe16",
+      "bytes": 40449
+    },
+    {
+      "index": 16,
+      "file": "16-hd05-bca-a4-ngang-le-lech-calibri.docx",
+      "profile": "hd05",
+      "profile_name": "Hướng dẫn 05-HD/VPTW",
+      "variant": "A4 ngang, lề lệch, Calibri cực nhỏ",
+      "sha256": "1afaffc503bf2f2164c1e5531689f360d6ea353813ad33a6fc921a9171aec10d",
+      "bytes": 40534
+    },
+    {
+      "index": 17,
+      "file": "17-hd05-bca-a5-le-am-courier-co-lon.docx",
+      "profile": "hd05",
+      "profile_name": "Hướng dẫn 05-HD/VPTW",
+      "variant": "A5 dọc, lề trái quá lớn, Courier New cỡ lớn",
+      "sha256": "071d1b6448a82bbb030611d8343d2f1cae59280bc513e8eaa2817659f912f534",
+      "bytes": 40472
+    },
+    {
+      "index": 18,
+      "file": "18-hd05-bca-legal-le-rong-tahoma-co-nho.docx",
+      "profile": "hd05",
+      "profile_name": "Hướng dẫn 05-HD/VPTW",
+      "variant": "Legal dọc, lề dưới rộng, Tahoma cỡ nhỏ",
+      "sha256": "c13b4138af2cfe71c8fcfbbdee1f7c1b06a6ddfe198cd6fc84172d45e2c66295",
+      "bytes": 40508
+    },
+    {
+      "index": 19,
+      "file": "19-hd29-bca-letter-le-sieu-hep-arial.docx",
+      "profile": "hd29",
+      "profile_name": "Hướng dẫn 29-HD/TWĐTN-VP",
+      "variant": "Letter dọc, lề siêu hẹp, Arial màu",
+      "sha256": "c2ebf60b19651feb2ad439e8e2ddf1282daf680ed539af43d3b2b5cec26a187e",
+      "bytes": 40456
+    },
+    {
+      "index": 20,
+      "file": "20-hd29-bca-a4-ngang-le-lech-calibri.docx",
+      "profile": "hd29",
+      "profile_name": "Hướng dẫn 29-HD/TWĐTN-VP",
+      "variant": "A4 ngang, lề lệch, Calibri cực nhỏ",
+      "sha256": "4b0efb994bd062e5937a9f979160587b192dcf0764ba054353b106975d3d795c",
+      "bytes": 40540
+    },
+    {
+      "index": 21,
+      "file": "21-hd29-bca-a5-le-am-courier-co-lon.docx",
+      "profile": "hd29",
+      "profile_name": "Hướng dẫn 29-HD/TWĐTN-VP",
+      "variant": "A5 dọc, lề trái quá lớn, Courier New cỡ lớn",
+      "sha256": "c670b8b3658f0833c29156a2c0196dd308c6867eb5a6a81379b2d65fcc28c0fb",
+      "bytes": 40516
+    },
+    {
+      "index": 22,
+      "file": "22-hd29-bca-legal-le-rong-tahoma-co-nho.docx",
+      "profile": "hd29",
+      "profile_name": "Hướng dẫn 29-HD/TWĐTN-VP",
+      "variant": "Legal dọc, lề dưới rộng, Tahoma cỡ nhỏ",
+      "sha256": "2ba8361d457557c63122491f609d5e253224bdf7ffd21e2ae85a8741fda3b4a6",
+      "bytes": 40522
+    },
+    {
+      "index": 23,
+      "file": "23-nd250-bca-letter-le-sieu-hep-arial.docx",
+      "profile": "nd250",
+      "profile_name": "Nghị định 250/2026/NĐ-CP",
+      "variant": "Letter dọc, lề siêu hẹp, Arial màu",
+      "sha256": "f093f3793dbcfc53051d57b7da15d8f1f2e87daf405e455b55656d275a5668b7",
+      "bytes": 40530
+    },
+    {
+      "index": 24,
+      "file": "24-nd250-bca-a4-ngang-le-lech-calibri.docx",
+      "profile": "nd250",
+      "profile_name": "Nghị định 250/2026/NĐ-CP",
+      "variant": "A4 ngang, lề lệch, Calibri cực nhỏ",
+      "sha256": "a685abd4a3c73ca9f078a96902d3374fe17e80cc82a4024ba5f63b6b78070157",
+      "bytes": 40639
+    },
+    {
+      "index": 25,
+      "file": "25-nd250-bca-a5-le-am-courier-co-lon.docx",
+      "profile": "nd250",
+      "profile_name": "Nghị định 250/2026/NĐ-CP",
+      "variant": "A5 dọc, lề trái quá lớn, Courier New cỡ lớn",
+      "sha256": "15bee78ee80a531ebd8ff3032456924b27f5638fa6c92cf391532057ba155a71",
+      "bytes": 40555
+    },
+    {
+      "index": 26,
+      "file": "26-nd250-bca-legal-le-rong-tahoma-co-nho.docx",
+      "profile": "nd250",
+      "profile_name": "Nghị định 250/2026/NĐ-CP",
+      "variant": "Legal dọc, lề dưới rộng, Tahoma cỡ nhỏ",
+      "sha256": "ddfc76eff1858037fa8093a98f8bf37a8698ca10964c651bfc7191abe6a84ff2",
+      "bytes": 40578
+    },
+    {
+      "index": 27,
+      "file": "27-cv5512-bca-letter-le-sieu-hep-arial.docx",
+      "profile": "cv5512",
+      "profile_name": "Công văn 5512/BGDĐT-GDTrH",
+      "variant": "Letter dọc, lề siêu hẹp, Arial màu",
+      "sha256": "c66cf91324a0f116e77468e62fc84faf7b496741b83b75c531776cb692296905",
+      "bytes": 40662
+    },
+    {
+      "index": 28,
+      "file": "28-cv5512-bca-a4-ngang-le-lech-calibri.docx",
+      "profile": "cv5512",
+      "profile_name": "Công văn 5512/BGDĐT-GDTrH",
+      "variant": "A4 ngang, lề lệch, Calibri cực nhỏ",
+      "sha256": "8ceca4b73b27f9d7935ca5b74abe9513da9c3cc2ea97dbfcc3d8301276fbc9f8",
+      "bytes": 40718
+    },
+    {
+      "index": 29,
+      "file": "29-cv5512-bca-a5-le-am-courier-co-lon.docx",
+      "profile": "cv5512",
+      "profile_name": "Công văn 5512/BGDĐT-GDTrH",
+      "variant": "A5 dọc, lề trái quá lớn, Courier New cỡ lớn",
+      "sha256": "48694d7ad18b6c011d3054b23fd40fd0f50dd2f9cbbda3243821115ac6c8684e",
+      "bytes": 40692
+    },
+    {
+      "index": 30,
+      "file": "30-cv5512-bca-legal-le-rong-tahoma-co-nho.docx",
+      "profile": "cv5512",
+      "profile_name": "Công văn 5512/BGDĐT-GDTrH",
+      "variant": "Legal dọc, lề dưới rộng, Tahoma cỡ nhỏ",
+      "sha256": "9a02b30c0af44d8702585d7dd3fd3c1d35a63b737cc0b6c59fef90ba13744350",
+      "bytes": 40743
+    }
+  ]
+}
