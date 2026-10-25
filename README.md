@@ -27,12 +27,46 @@ Có hai cách dùng:
 | VBHN 08 | Văn bản hợp nhất 08/VBHN-BCA (2021) | Văn bản Công an nhân dân |
 | HD 05 | Hướng dẫn 05-HD/VPTW | Văn bản Đảng |
 | HD 29 | Hướng dẫn 29-HD/TWĐTN-VP | Văn bản Đoàn TNCS Hồ Chí Minh |
-| NĐ 250 | Pháp điển & hợp nhất QPPL | Văn bản hợp nhất |
-| CV 5512 | Công văn 5512/BGDĐT-GDTrH | Kế hoạch bài dạy |
+| NĐ 250/2026 | Nghị định 250/2026/NĐ-CP (Phụ lục: kỹ thuật trình bày văn bản hợp nhất) | Văn bản hợp nhất |
+| CV 5512 | Công văn 5512/BGDĐT-GDTrH (Phụ lục IV) | Kế hoạch bài dạy |
+
+TT 68/2023/TT-BQP: **chưa có toàn văn công khai để kiểm chứng** (xem `docs/quy-chuan/02-TT68-2023-BQP-CHUA-TIM-THAY.md`);
+thông số Quân đội hiện là NĐ 30 + khối đầu 13/14/14 + cấp bậc quân hàm người ký.
+
+Văn bản hợp nhất (NĐ 250/2026, hiệu lực 01/7/2026): ô trái khối đầu ghi **"VĂN BẢN HỢP NHẤT" + `Số: 01/2026/VBHN-...`** thay cho
+tên cơ quan (dòng "VĂN BẢN HỢP NHẤT" đặt giữa trang được chuyển vào ô trái); tên loại giữa trang là tên loại của văn bản được
+sửa đổi (THÔNG TƯ, NGHỊ ĐỊNH...). Phần ký xác thực ngăn với nội dung bằng **đường kẻ ngang dài nét liền**; cột phải: tên cơ quan
+ký xác thực (kẻ dưới) → "XÁC THỰC VĂN BẢN HỢP NHẤT" → ngày tháng → chức vụ → (Chữ ký và dấu) → họ tên. Rà soát báo thiếu
+"VĂN BẢN HỢP NHẤT", số thiếu năm/ký hiệu VBHN, thiếu phần ký xác thực. Khổ giấy, lề, phông, cỡ chữ: Phụ lục dẫn chiếu quy định
+về văn bản QPPL — V-Format dùng thông số NĐ 30, dòng đơn.
+
+Kế hoạch bài dạy (CV 5512 Phụ lục IV): rà soát **khung nội dung** (mã `GD5512-11`) — Tên bài dạy, Môn học/lớp, Thời gian
+thực hiện; I. Mục tiêu (1. Về kiến thức, 2. Về năng lực, 3. Về phẩm chất); II. Thiết bị dạy học và học liệu; III. Tiến trình
+dạy học với 4 hoạt động, mỗi hoạt động có a) Mục tiêu, b) Nội dung, c) Sản phẩm, d) Tổ chức thực hiện (thiếu Hoạt động 4 Vận
+dụng chỉ nhắc, theo Ghi chú 1). Công văn không quy định thể thức trình bày, nên lỗi lề, phông, cỡ chữ của KHBD chỉ ở mức
+**khuyến nghị** (Info).
 
 Công an (08/VBHN-BCA, hợp nhất Thông tư 26/2019/TT-BCA về công tác văn thư trong CAND): Điều 9 dẫn chiếu thể thức theo
 Điều 8, 9 NĐ 30/2020, nên V-Format trình bày như NĐ 30; phần riêng của CAND được rà soát là **cấp bậc hàm trước họ tên người ký**
-(ví dụ "Đại tá Nguyễn Văn A") — app báo lỗi `CA08-09` nhưng không tự điền vì không biết cấp bậc.
+(ví dụ "Đại tá Nguyễn Văn A"; nhận cả hạ sĩ quan "Thượng sĩ/Trung sĩ/Hạ sĩ", chiến sĩ "Binh nhất/Binh nhì", và chức danh khoa học,
+danh hiệu đứng trước cấp bậc như "PGS.TS Thiếu tướng ..." theo Điều 13) — app báo lỗi `CA08-09` nhưng không tự điền vì không biết cấp bậc.
+
+Văn bản thực tế thường gặp cũng được xử lý: khối đầu gõ hai cột bằng **tab** (tách về bảng 2 cột, nối tên cơ quan bị xuống dòng);
+**ghi chú biểu mẫu** ("Mẫu BL2", "BH theo TT số …", "VB21") giữ nguyên; **khối chữ ký đặt bằng thụt lề** giữ ở nửa phải;
+đề mục **đánh số tự động** của Word ("II.", "III.") nhận theo số Word hiển thị; danh sách tự động không bị báo sai thụt dòng.
+Văn bản Quân đội (TT 68) cũng được rà soát cấp bậc quân hàm người ký như vậy (mã `QD68-09`).
+
+NĐ 30: số văn bản nhỏ hơn 10 thêm số 0 (`Số: 05/QĐ-UBND`); cỡ chữ khối đầu thống nhất — Quốc hiệu 12, Tiêu ngữ 13, ngày tháng 13
+(Quân đội: 13/14/14), rà soát báo lỗi khi lệch.
+
+Đảng (HD 05-HD/VPTW ngày 27/5/2026): lề cố định 20/20/30/15 mm; nội dung, căn cứ, Điều, đề mục, "Kính gửi" cỡ 14–15
+(chọn cỡ 13 vẫn giữ 14), giãn dòng Exactly 18 pt; trích yếu công văn cỡ 12 nghiêng; dưới trích yếu chèn `-----`;
+khoản không đậm; căn cứ `- Căn cứ ...;` (căn cứ cuối dấu chấm), kiểu chữ đứng; "Kính gửi:" nghiêng; nơi nhận kết thúc bằng `;`;
+`T/M`, `K/T`, `T/L`, `T/UQ`; chức vụ người ký ("PHÓ BÍ THƯ") không đậm.
+
+Đoàn (HD 29-HD/TWĐTN-VP, Mẫu 3): lề 20/20/30/20 mm; lời văn cỡ 14 cố định, lùi đầu dòng 1,27 cm, giãn dòng tối đa 1,2;
+ngày tháng cỡ 13; trích yếu công văn cỡ 12 nghiêng; dưới trích yếu chèn `-------`; "Kính gửi:" đậm (chữ "Kính gửi:" nghiêng);
+"Nơi nhận:" cỡ 13 đậm, danh sách cỡ 11; chức vụ người ký không đậm.
 
 Mặc định **tự nhận diện** quy chuẩn (theo tiêu đề Đảng/Đoàn, tên cơ quan quân đội, "KẾ HOẠCH BÀI DẠY", "VĂN BẢN HỢP NHẤT"...),
 hoặc chọn cố định trên Ribbon / bảng điều khiển.
@@ -41,13 +75,14 @@ hoặc chọn cố định trên Ribbon / bảng điều khiển.
 
 - **Chuẩn hóa 1-Click**: khổ A4 + lề theo quy chuẩn; phông Times New Roman; cỡ/kiểu chữ từng thành phần;
   sửa chữ Quốc hiệu, Tiêu ngữ, số ký hiệu (`Số: 12/QĐ-UBND`, Đảng `Số 12-NQ/TU`), ngày tháng
-  (thêm số 0: ngày < 10, tháng 1–2), "Kính gửi:", "Điều 1.", danh sách nơi nhận (`- ...;` … `- Lưu: VT.`), quyền hạn ký (`TM.`/`KT.`/`T/M`);
+  (thêm số 0: ngày < 10, tháng 1–2), "Kính gửi:", "Điều 1.", danh sách nơi nhận (`- ...;` … `- Lưu: VT.`), quyền hạn ký (`TM.`/`KT.`/`TL.`, Đảng `T/M`/`K/T`/`T/L`);
   thụt đầu dòng 1 cm, giãn dòng, khoảng cách đoạn; tự **dàn khối đầu và khối chữ ký – nơi nhận thành bảng 2 cột không viền**;
-  **kẻ đường** dưới tiêu ngữ (bằng độ dài dòng chữ), dưới tên cơ quan ban hành và trích yếu (≈ 1/3–1/2);
+  **kẻ đường** dưới tiêu ngữ (bằng độ dài dòng chữ), dưới tên cơ quan ban hành và trích yếu (≈ 1/3–1/2; Đảng, Đoàn dùng dòng gạch `-----`);
   **số trang** giữa đầu trang, ẩn ở trang đầu; bảng nội dung vừa khổ giấy và tự lặp hàng tiêu đề. Tất cả gom thành **một bước Undo**.
 - **Rà soát thể thức**: phát hiện lỗi và gắn nhận xét "V-Format" vào đúng đoạn. Mã lỗi `<quy chuẩn>-01..10`
   (vd. `ND30-04`, `DTN-07`): 01 khổ giấy · 02 lề · 03 phông · 04 cỡ chữ · 05 đậm/nghiêng/in hoa · 06 căn lề/thụt dòng ·
-  07 Quốc hiệu–tiêu ngữ–tiêu đề · 08 số ký hiệu/ngày tháng · 09 chữ ký/nơi nhận · 10 thiếu thành phần/khoảng trắng/số trang.
+  07 Quốc hiệu–tiêu ngữ–tiêu đề · 08 số ký hiệu/ngày tháng · 09 chữ ký/nơi nhận · 10 thiếu thành phần/khoảng trắng/số trang ·
+  11 khung nội dung kế hoạch bài dạy (CV 5512).
   Nút **Xóa nhận xét V-Format** / **Xóa tất cả nhận xét**.
 - **Bố cục trang in A4**: lề trang, đánh số trang, **in một mặt / hai mặt** (lề đối xứng, nhớ riêng cho từng tài liệu), chuẩn hóa bảng.
 - **Chèn thành phần thể thức**: khối đầu (theo quy chuẩn đang dùng), khối chữ ký & nơi nhận, nơi nhận, địa danh – ngày tháng hôm nay.

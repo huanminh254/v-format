@@ -54,7 +54,7 @@ namespace VFormat.App
             });
             header.Controls.Add(new Label
             {
-                Text = "Chuẩn hóa thể thức văn bản Word theo NĐ 30 · TT 68 · Công an · HD 05 · HD 29 · Pháp điển · CV 5512 — offline",
+                Text = "Chuẩn hóa thể thức văn bản Word theo NĐ 30 · TT 68 · Công an · HD 05 · HD 29 · NĐ 250/2026 · CV 5512 — offline",
                 ForeColor = Color.FromArgb(210, 228, 245), AutoSize = true, Location = new Point(21, 40),
             });
 

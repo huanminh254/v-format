@@ -63,8 +63,8 @@ namespace VFormat.AddIn
         public FormatProfile ProfileFor(StandardKind kind)
         {
             var p = Profiles.Get(kind).Clone();
-            if (kind != StandardKind.Dang_HD05) p.SetBodySize(BodySize);
-            p.LineSpacing = LineSpacing;
+            p.SetBodySize(BodySize);
+            p.SetLineSpacing(LineSpacing);
             return p;
         }
     }

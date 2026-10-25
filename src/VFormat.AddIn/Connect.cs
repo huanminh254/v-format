@@ -40,6 +40,8 @@ namespace VFormat.AddIn
         public void OnConnection(object application, ext_ConnectMode connectMode, object addInInst, ref Array custom)
         {
             _app = (Word.Application)application;
+            // Script kiểm thử lấy add-in qua Application.COMAddIns("VFormat.Connect").Object
+            try { ((COMAddIn)addInInst).Object = this; } catch { }
             try
             {
                 ((Word.ApplicationEvents4_Event)_app).DocumentChange += () => _ribbon?.Invalidate();
@@ -117,6 +119,79 @@ namespace VFormat.AddIn
                 case "btnTemplateFolder":
                     Directory.CreateDirectory(Settings.TemplateFolder);
                     Process.Start("explorer.exe", "\"" + Settings.TemplateFolder + "\"");
+                    break;
+                case "btnManualHeader":
+                    Formatter.FormatHeaderOnly(_app, Doc(), Settings);
+                    Status("Đã chuẩn hóa riêng khối Tiêu đề (Quốc hiệu / Cơ quan).");
+                    break;
+                case "btnManualSign":
+                    Formatter.FormatSignOnly(_app, Doc(), Settings);
+                    Status("Đã chuẩn hóa riêng khối Chữ ký & Nơi nhận.");
+                    break;
+                case "btnManualBody":
+                    Formatter.FormatBodyOnly(_app, Doc(), Settings);
+                    Status("Đã chuẩn hóa riêng phần Thân bài.");
+                    break;
+                case "btnDeleteBlankPages":
+                {
+                    int del = WordToolHelper.DeleteBlankPages(Doc());
+                    Info(del > 0 ? $"Đã xóa {del} dòng/trang trắng thừa cuối văn bản!" : "Không tìm thấy trang trắng thừa nào.");
+                    break;
+                }
+                case "btnCleanSpaces":
+                    WordToolHelper.CleanSpacingErrors(Doc(), _app.Selection);
+                    Status("Đã làm sạch khoảng trắng lỗi và dấu cách trước dấu câu.");
+                    break;
+                case "btnNumberToWords":
+                {
+                    var sel = _app.Selection;
+                    if (sel == null || sel.Start == sel.End)
+                    {
+                        Info("Vui lòng bôi đen số tiền cần chuyển sang chữ (ví dụ: 15.000.000) rồi bấm lại.");
+                        break;
+                    }
+                    string selText = sel.Text ?? "";
+                    if (VndAmountReader.TryConvert(selText, out var words, out var err))
+                    {
+                        sel.Text = words;
+                        Status($"Đã chuyển số tiền: {words}");
+                    }
+                    else
+                    {
+                        Info($"Không thể chuyển số tiền: {err}");
+                    }
+                    break;
+                }
+                case "btnConvertOldFonts":
+                    WordToolHelper.ConvertTcvn3ToUnicode(Doc());
+                    Info("Đã chuyển đổi mã TCVN3 sang Unicode dựng sẵn thành công!");
+                    break;
+                case "insTM":
+                    InsertTextAtSelection("TM. ỦY BAN NHÂN DÂN\nCHỦ TỊCH\n\n\n\n(Họ và tên)", true);
+                    break;
+                case "insKT":
+                    InsertTextAtSelection("KT. CHỦ TỊCH\nPHÓ CHỦ TỊCH\n\n\n\n(Họ và tên)", true);
+                    break;
+                case "insTL":
+                    InsertTextAtSelection("TL. CHỦ TỊCH\nCHÁNH VĂN PHÒNG\n\n\n\n(Họ và tên)", true);
+                    break;
+                case "insTUQ":
+                    InsertTextAtSelection("TUQ. GIÁM ĐỐC\nTRƯỞNG PHÒNG\n\n\n\n(Họ và tên)", true);
+                    break;
+                case "insQ":
+                    InsertTextAtSelection("QUYỀN GIÁM ĐỐC\n\n\n\n(Họ và tên)", true);
+                    break;
+                case "insHoaToc":
+                    InsertStampAtSelection("HỎA TỐC");
+                    break;
+                case "insThuongKhan":
+                    InsertStampAtSelection("THƯỢNG KHẨN");
+                    break;
+                case "insMat":
+                    InsertStampAtSelection("MẬT");
+                    break;
+                case "insToiMat":
+                    InsertStampAtSelection("TỐI MẬT");
                     break;
                 case "btnAbout":
                     Info("V-FORMAT — Chuẩn hóa thể thức văn bản Word 1-Click\n\n" +
@@ -234,8 +309,32 @@ namespace VFormat.AddIn
 
         internal Word.Document Doc()
         {
-            if (_app.Documents.Count == 0) throw new InvalidOperationException("Chưa có tài liệu nào đang mở.");
-            return _app.ActiveDocument;
+            if (_app == null || _app.Documents.Count == 0)
+                throw new InvalidOperationException("Chưa có tài liệu nào đang mở trong Microsoft Word.");
+
+            try
+            {
+                if (_app.ActiveProtectedViewWindow != null)
+                {
+                    throw new InvalidOperationException(
+                        "Tài liệu đang mở ở chế độ xem an toàn (Protected View).\n" +
+                        "Vui lòng nhấn nút \"Enable Editing\" (Bật tính năng chỉnh sửa) phía trên Word trước khi tiếp tục.");
+                }
+            }
+            catch (COMException) { }
+
+            Word.Document doc;
+            try
+            {
+                doc = _app.ActiveDocument;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Không thể truy cập tài liệu hiện hành: " + ex.Message);
+            }
+
+            WordProtectionHelper.EnsureEditablePrintView(doc);
+            return doc;
         }
 
         internal FormatResult RunFormat()
@@ -265,6 +364,56 @@ namespace VFormat.AddIn
                 Info(items.Count == 0 ? "Không phát hiện lỗi chính tả." :
                     (fix ? $"Đã sửa {items.Count} lỗi." : $"Phát hiện {items.Count} lỗi (tô vàng + nhận xét)."));
             return items;
+        }
+
+        // ---- Cổng cho script kiểm thử (không hiện hộp thoại) ----
+
+        /// <param name="standard">auto | nd30 | tt68 | ca08 | hd05 | hd29 | nd250 | cv5512</param>
+        public string FormatActive(string standard)
+        {
+            StandardKind? k = null;
+            if (string.Equals(standard, "auto", StringComparison.OrdinalIgnoreCase))
+            {
+                // "auto" luôn tự nhận diện, kể cả khi Ribbon đang chọn cố định một quy chuẩn
+                var s = Settings; bool saved = s.AutoDetect;
+                try { s.AutoDetect = true; var r0 = Formatter.Run(_app, Doc(), s, null); _testKind = r0.Profile.Kind; return r0.ToString(); }
+                finally { s.AutoDetect = saved; }
+            }
+            else
+                k = Profiles.All.First(x => string.Equals(Profiles.Get(x).ShortName.Replace(" ", "").Replace(".", ""),
+                        standard.Replace(" ", ""), StringComparison.OrdinalIgnoreCase) || CodeOf(x) == standard.ToLowerInvariant());
+            var r = Formatter.Run(_app, Doc(), Settings, k);
+            _testKind = r.Profile.Kind;
+            return r.ToString();
+        }
+
+        StandardKind? _testKind;
+
+        /// <summary>Rà soát theo đúng quy chuẩn lần FormatActive gần nhất (không đổi cài đặt đã lưu).</summary>
+        public string ReviewActive()
+        {
+            var s = Settings;
+            bool auto = s.AutoDetect; var std = s.Standard;
+            try
+            {
+                if (_testKind.HasValue) { s.AutoDetect = false; s.Standard = _testKind.Value; }
+                return string.Join("\n", Review.Run(_app, Doc(), s, addComments: false).Select(x => x.ToString()));
+            }
+            finally { s.AutoDetect = auto; s.Standard = std; }
+        }
+
+        static string CodeOf(StandardKind k)
+        {
+            switch (k)
+            {
+                case StandardKind.HanhChinh_ND30: return "nd30";
+                case StandardKind.QuanDoi_TT68: return "tt68";
+                case StandardKind.CongAn_BCA08: return "ca08";
+                case StandardKind.Dang_HD05: return "hd05";
+                case StandardKind.Doan_HD29: return "hd29";
+                case StandardKind.PhapDien_ND250: return "nd250";
+                default: return "cv5512";
+            }
         }
 
         void RunFormatTablesOnly()
@@ -370,5 +519,26 @@ namespace VFormat.AddIn
             }
             finally { _ribbon?.Invalidate(); }
         }
+
+        void InsertTextAtSelection(string text, bool bold)
+        {
+            var sel = _app.Selection;
+            if (sel == null) return;
+            sel.Text = text;
+            if (bold) sel.Font.Bold = 1;
+            sel.Font.Name = "Times New Roman";
+        }
+
+        void InsertStampAtSelection(string stamp)
+        {
+            var sel = _app.Selection;
+            if (sel == null) return;
+            sel.Text = stamp;
+            sel.Font.Bold = 1;
+            sel.Font.Name = "Times New Roman";
+            sel.Font.Size = 12;
+            try { sel.Borders.Enable = 1; } catch { }
+        }
+
     }
 }

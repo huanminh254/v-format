@@ -11,13 +11,22 @@
           <dropDown id="ddStandard" label="Quy chuẩn" sizeString="WWWWWWWWWWWWWWWWWWWWW"
                     getItemCount="GetItemCount" getItemLabel="GetItemLabel" getItemID="GetItemID"
                     getSelectedItemIndex="GetSelectedItemIndex" onAction="OnSelect"
-                    supertip="Tự nhận diện hoặc chọn hệ quy chuẩn: NĐ 30, TT 68, Công an (08/VBHN-BCA), HD 05, HD 29, Pháp điển, CV 5512." />
+                    supertip="Tự nhận diện hoặc chọn hệ quy chuẩn: NĐ 30, TT 68, Công an (08/VBHN-BCA), HD 05, HD 29, NĐ 250/2026 (văn bản hợp nhất), CV 5512." />
           <dropDown id="ddSize" label="Cỡ chữ" sizeString="WWWWW"
                     getItemCount="GetItemCount" getItemLabel="GetItemLabel" getItemID="GetItemID"
                     getSelectedItemIndex="GetSelectedItemIndex" onAction="OnSelect" />
           <dropDown id="ddSpacing" label="Giãn dòng" sizeString="WWWWW"
                     getItemCount="GetItemCount" getItemLabel="GetItemLabel" getItemID="GetItemID"
                     getSelectedItemIndex="GetSelectedItemIndex" onAction="OnSelect" />
+        </group>
+
+        <group id="grpManual" label="Chuẩn hóa phân đoạn">
+          <button id="btnManualHeader" label="Chỉ sửa Tiêu đề" imageMso="HeaderFooterHeaderEdit"
+                  supertip="Chuẩn hóa riêng phần Quốc hiệu, Tiêu ngữ, Tên cơ quan, Số ký hiệu và Địa danh ngày tháng." onAction="OnAction" />
+          <button id="btnManualBody" label="Chỉ sửa Nội dung" imageMso="SectionInsert"
+                  supertip="Chuẩn hóa riêng phần nội dung văn bản, bảng biểu, căn lề và giãn dòng." onAction="OnAction" />
+          <button id="btnManualSign" label="Chỉ sửa Chữ ký" imageMso="SignatureLineInsert"
+                  supertip="Chuẩn hóa riêng khối Nơi nhận và Quyền hạn ký, chức vụ, họ tên." onAction="OnAction" />
         </group>
 
         <group id="grpReview" label="Rà soát thể thức">
@@ -37,10 +46,34 @@
                   supertip="Bảng vừa khổ giấy, tự lặp hàng tiêu đề khi sang trang." onAction="OnAction" />
         </group>
 
+        <group id="grpTools" label="Tiện ích hành chính">
+          <button id="btnCleanSpaces" label="Dọn khoảng trắng" imageMso="WordArtClear"
+                  supertip="Dọn sạch khoảng trắng đôi và dấu cách sai trước dấu câu." onAction="OnAction" />
+          <button id="btnDeleteBlankPages" label="Xóa trang trắng" imageMso="PageBreakRemove"
+                  supertip="Tự động xóa các trang trắng, dòng trống thừa vô nghĩa ở cuối văn bản." onAction="OnAction" />
+          <button id="btnNumberToWords" label="Đọc số thành chữ" imageMso="CalculatedFieldInsert"
+                  supertip="Chuyển số tiền đang bôi đen sang chữ VNĐ." onAction="OnAction" />
+          <button id="btnConvertOldFonts" label="Chuyển mã TCVN3" imageMso="FontColorCycle"
+                  supertip="Chuyển mã font cũ TCVN3 (.VnTime) sang Unicode chuẩn." onAction="OnAction" />
+        </group>
+
         <group id="grpInsert" label="Chèn thành phần thể thức">
           <button id="btnInsHeader" label="Khối đầu" size="large" imageMso="HeaderInsertGallery"
                   supertip="Chèn Quốc hiệu, Tiêu ngữ, tên cơ quan, số ký hiệu, ngày tháng (bảng 2 cột)." onAction="OnAction" />
           <button id="btnInsSign" label="Chữ ký &amp; Nơi nhận" size="large" imageMso="SignatureLineInsert" onAction="OnAction" />
+          <menu id="mnuAuthority" label="Quyền hạn ký" imageMso="SignatureShow">
+            <button id="insTM" label="TM. (Thay mặt UBND/Tập thể)" onAction="OnAction" />
+            <button id="insKT" label="KT. (Ký thay Thứ trưởng/Phó CT)" onAction="OnAction" />
+            <button id="insTL" label="TL. (Thừa lệnh Chánh VP/Trưởng phòng)" onAction="OnAction" />
+            <button id="insTUQ" label="TUQ. (Thừa ủy quyền)" onAction="OnAction" />
+            <button id="insQ" label="Q. (Quyền Giám đốc)" onAction="OnAction" />
+          </menu>
+          <menu id="mnuStamps" label="Dấu khẩn / Mật" imageMso="ShieldAlert">
+            <button id="insHoaToc" label="HỎA TỐC" onAction="OnAction" />
+            <button id="insThuongKhan" label="THƯỢNG KHẨN" onAction="OnAction" />
+            <button id="insMat" label="MẬT" onAction="OnAction" />
+            <button id="insToiMat" label="TỐI MẬT" onAction="OnAction" />
+          </menu>
           <button id="btnInsNoiNhan" label="Nơi nhận" imageMso="BulletsGallery" onAction="OnAction" />
           <button id="btnInsDate" label="Địa danh, ngày tháng" imageMso="DateAndTimeInsert" onAction="OnAction" />
         </group>

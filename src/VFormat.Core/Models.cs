@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VFormat.Core
 {
@@ -9,7 +10,7 @@ namespace VFormat.Core
         QuanDoi_TT68 = 1,     // Thông tư 68/2023/TT-BQP
         Dang_HD05 = 2,        // Hướng dẫn 05-HD/VPTW
         Doan_HD29 = 3,        // Hướng dẫn 29-HD/TWĐTN-VP
-        PhapDien_ND250 = 4,   // Pháp điển & hợp nhất văn bản QPPL
+        PhapDien_ND250 = 4,   // Nghị định 250/2026/NĐ-CP: kỹ thuật trình bày văn bản hợp nhất
         GiaoDuc_CV5512 = 5,   // Kế hoạch bài dạy - CV 5512/BGDĐT-GDTrH
         CongAn_BCA08 = 6,     // Văn bản hợp nhất 08/VBHN-BCA (công tác văn thư trong CAND)
     }
@@ -47,6 +48,10 @@ namespace VFormat.Core
         NoiNhanTitle,
         NoiNhanItem,
         ThongTinDau,       // dòng thông tin trước tên loại (KHBD: Trường, Tổ, Họ tên giáo viên)
+        GhiChuMau,         // ghi chú biểu mẫu ở đầu trang ("Mẫu BL2", "BH theo TT số 44/2025/TT-BCA", "VB21")
+        GhiChuKy,          // "(Ký, ghi rõ họ tên)", "(Chữ ký và dấu)", "(Đã ký)"
+        XacThuc,           // "XÁC THỰC VĂN BẢN HỢP NHẤT" (NĐ 250/2026)
+        CoQuanXacThuc,     // tên cơ quan của người ký xác thực, trên dòng "XÁC THỰC VĂN BẢN HỢP NHẤT"
     }
 
     public enum Align { Left = 0, Center = 1, Right = 2, Justify = 3 }
@@ -68,6 +73,10 @@ namespace VFormat.Core
         public int Italic = -1;
         public Align? Alignment;
         public float FirstIndentPt;
+        public bool Colored;       // có chữ màu khác đen / tự động
+        public float LeftIndentPt; // thụt lề trái của đoạn (khối chữ ký đặt bằng thụt lề)
+        public bool InList;        // đoạn thuộc danh sách đánh số / gạch đầu dòng tự động của Word
+        public string ListPrefix;  // số thứ tự tự động Word hiển thị ("II.", "1.", "a)"); null nếu không có
 
         public ParagraphInfo() { }
         public ParagraphInfo(string text) { Text = text ?? ""; }
@@ -119,7 +128,19 @@ namespace VFormat.Core
         public List<ElementKind> Kinds = new List<ElementKind>();
         public StandardKind Standard;
 
+        /// <summary>
+        /// Đoạn khối đầu gộp hai cột bằng tab ("CỤC CẢNH SÁT ⇥ CỘNG HÒA XÃ HỘI..."): phần trái và loại của nó.
+        /// Loại của đoạn (Kinds) là loại phần phải.
+        /// </summary>
+        public Dictionary<int, HeaderSplit> Splits = new Dictionary<int, HeaderSplit>();
+
         public int FirstIndexOf(ElementKind k) => Kinds.IndexOf(k);
-        public bool Has(ElementKind k) => Kinds.Contains(k);
+        public bool Has(ElementKind k) => Kinds.Contains(k) || Splits.Values.Any(x => x.LeftKind == k);
+    }
+
+    public class HeaderSplit
+    {
+        public string Left, Right;
+        public ElementKind LeftKind;
     }
 }

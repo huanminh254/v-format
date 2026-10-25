@@ -55,7 +55,8 @@ namespace VFormat.Core
             st[ElementKind.DauSao] = S(12, 12, 14);
             st[ElementKind.SoKyHieu] = S(13, 13, 13, before: 6);
             st[ElementKind.TrichYeuCongVan] = S(12, 12, 13);
-            st[ElementKind.DiaDanhNgayThang] = S(14, 13, 14, italic: true, before: 6);
+            // cỡ chữ khối đầu thống nhất (NĐ 30 Phụ lục I, chú thích mục V): Quốc hiệu 12 → Tiêu ngữ 13 → ngày tháng 13
+            st[ElementKind.DiaDanhNgayThang] = S(13, 13, 14, italic: true, before: 6);
             st[ElementKind.TenLoai] = S(14, 13, 14, bold: true, upper: true, before: 18);
             st[ElementKind.TrichYeu] = S(14, 13, 14, bold: true, after: 0);
             st[ElementKind.Phan] = S(14, 13, 14, bold: true, before: 12);
@@ -73,6 +74,11 @@ namespace VFormat.Core
             st[ElementKind.NoiNhanItem] = S(11, 11, 11, align: Align.Left);
             st[ElementKind.Empty] = S(b, 11, 14, align: Align.Justify);
             st[ElementKind.ThongTinDau] = S(b, 13, 14, align: Align.Left);
+            st[ElementKind.GhiChuMau] = S(10, 6, 14, align: Align.Right);
+            st[ElementKind.GhiChuKy] = S(b, 12, 14, italic: true);
+            // phần ký xác thực văn bản hợp nhất (NĐ 250/2026 Phụ lục mục XIII)
+            st[ElementKind.CoQuanXacThuc] = S(13, 12, 13, bold: true, upper: true);
+            st[ElementKind.XacThuc] = S(14, 13, 14, bold: true, upper: true);
         }
 
         public static FormatProfile HanhChinh()
@@ -117,12 +123,15 @@ namespace VFormat.Core
                 FullName = "Thông tư 68/2023/TT-BQP",
                 Description = "Văn bản hành chính trong Quân đội",
                 IssuePrefix = "QD68",
+                RankBeforeSignerName = true,
             };
             AddCommonStyles(p);
             // Quân đội: tên cơ quan cấp trên & cơ quan ban hành cỡ 13; người ký ghi cấp bậc trước họ tên.
             p.Styles[ElementKind.CoQuanChuQuan].Size = 13;
             p.Styles[ElementKind.CoQuanBanHanh].Size = 13;
             p.Styles[ElementKind.QuocHieu].Size = 13;
+            p.Styles[ElementKind.TieuNgu].Size = 14;            // Quốc hiệu 13 → Tiêu ngữ 14 → ngày tháng 14
+            p.Styles[ElementKind.DiaDanhNgayThang].Size = 14;
             p.HeaderRightColMm = 100;   // Quốc hiệu cỡ 13 đậm ≈ 96 mm
             p.HeaderLeftColMm = 68;
             return p;
@@ -137,7 +146,6 @@ namespace VFormat.Core
                 FullName = "Hướng dẫn 05-HD/VPTW",
                 Description = "Văn bản của Đảng",
                 IssuePrefix = "D05",
-                MarginLeftMm = 30, MarginRightMm = 15,
                 SoKyHieuHasColon = false,
                 SoPrefix = "Số",
                 UseDauSao = true,
@@ -146,21 +154,34 @@ namespace VFormat.Core
                 CoQuanLineRatio = 0,
                 TrichYeuLineRatio = 0,
                 NoiNhanUnderline = true,
-                ThayMatText = "T/M",
-                NoiNhanSeparator = ",",
+                ThayMatText = "T/M", KyThayText = "K/T", ThuaLenhText = "T/L", ThuaUyQuyenText = "T/UQ",
+                SignerTitleBold = false,
+                KinhGuiPrefixItalic = true,
+                TitleDashes = "-----",
+                CanCuDash = true,
+                LineExactPt = 18,    // HD 05/2026 mục 6.2.2: Exactly 18-22 pt
                 HeaderLeftColMm = 80, HeaderRightColMm = 85,
                 BodySize = 14,
             };
+            p.SetFixedMargins(20, 20, 30, 15);   // HD 05/2026 mục IV.4: lề cố định, không phải khoảng
             AddCommonStyles(p);
             var st = p.Styles;
             st[ElementKind.TieuDeDang] = S(15, 15, 15, bold: true, upper: true);
             st[ElementKind.CoQuanChuQuan] = S(14, 14, 14, upper: true);
             st[ElementKind.CoQuanBanHanh] = S(14, 14, 14, bold: true, upper: true);
             st[ElementKind.SoKyHieu] = S(14, 14, 14);
+            st[ElementKind.TrichYeuCongVan] = S(12, 12, 12, italic: true);
             st[ElementKind.DiaDanhNgayThang] = S(14, 14, 14, italic: true, align: Align.Right);
             st[ElementKind.TenLoai] = S(16, 15, 16, bold: true, upper: true, before: 18);
             st[ElementKind.TrichYeu] = S(14, 14, 15, bold: true);
             st[ElementKind.Body] = S(14, 14, 15, align: Align.Justify, indentCm: 1.0f, after: 6, single: false);
+            // căn cứ: kiểu chữ đứng như nội dung (HD 05 không quy định in nghiêng như NĐ 30)
+            st[ElementKind.CanCu] = S(14, 14, 15, align: Align.Justify, indentCm: 1.0f, after: 6, single: false);
+            // khoản "1. ...": đứng, không đậm (Phụ lục 2 mục 6)
+            st[ElementKind.MucSo] = S(14, 14, 15, align: Align.Justify, indentCm: 1.0f, after: 6, single: false);
+            // phần nội dung văn bản Đảng cỡ 14–15 (không phải 13–14 như NĐ 30), kể cả phần, chương, mục và tên
+            foreach (var k in FormatProfile.BodySizedKinds.Concat(new[] { ElementKind.Phan, ElementKind.Chuong, ElementKind.Muc, ElementKind.TenPhanChuong }))
+            { st[k].MinSize = 14; st[k].MaxSize = 15; }
             st[ElementKind.NoiNhanTitle] = S(14, 14, 14, underline: true, align: Align.Left, before: 12);
             st[ElementKind.NoiNhanItem] = S(12, 12, 12, align: Align.Left);
             st[ElementKind.ChucVuKy] = S(14, 14, 14, bold: true, upper: true);
@@ -182,20 +203,32 @@ namespace VFormat.Core
                 DauSaoText = "***",
                 HeaderTitle = "ĐOÀN TNCS HỒ CHÍ MINH",
                 CoQuanLineRatio = 0,
-                TrichYeuLineRatio = 0.4f,
-                NoiNhanUnderline = true,
+                TrichYeuLineRatio = 0,
+                TitleDashes = "-------",     // gạch nét rời dưới tên loại, trích yếu (mục 5)
+                SignerTitleBold = false,
+                KinhGuiPrefixItalic = true,
+                BodyFirstIndentCm = 1.27f,   // lùi đầu dòng 1 default tab (mục 6)
+                MaxLineSpacing = 1.2f,       // giãn dòng từ dòng đơn tới tối đa 1,2
                 HeaderLeftColMm = 80, HeaderRightColMm = 85,
             };
+            p.SetFixedMargins(20, 20, 30, 20);   // mục II.3: lề phải 20 mm
             AddCommonStyles(p);
             var st = p.Styles;
+            // Mẫu 3: kiểu chữ, cỡ chữ từng thành phần thể thức
             st[ElementKind.TieuDeDoan] = S(15, 15, 15, bold: true, upper: true, underline: false);
             st[ElementKind.CoQuanChuQuan] = S(14, 14, 14, upper: true);
             st[ElementKind.CoQuanBanHanh] = S(14, 14, 14, bold: true, upper: true);
             st[ElementKind.SoKyHieu] = S(14, 13, 14);
-            st[ElementKind.DiaDanhNgayThang] = S(14, 14, 14, italic: true, align: Align.Right);
+            st[ElementKind.DiaDanhNgayThang] = S(13, 13, 13, italic: true, align: Align.Right);
+            st[ElementKind.TrichYeuCongVan] = S(12, 12, 12, italic: true);
             st[ElementKind.TenLoai] = S(16, 15, 16, bold: true, upper: true, before: 18);
-            st[ElementKind.NoiNhanTitle] = S(14, 14, 14, underline: true, align: Align.Left, before: 12);
-            st[ElementKind.NoiNhanItem] = S(12, 12, 12, align: Align.Left);
+            st[ElementKind.KinhGui] = S(14, 14, 14, bold: true, align: Align.Center, before: 6, after: 6);
+            st[ElementKind.Phan] = S(15, 15, 16, bold: true, before: 12);
+            st[ElementKind.TenPhanChuong] = S(14, 14, 14, bold: true, after: 6);   // tiêu đề phần: chữ thường, đậm
+            st[ElementKind.NoiNhanTitle] = S(13, 13, 13, bold: true, align: Align.Left, before: 12);
+            st[ElementKind.NoiNhanItem] = S(11, 11, 11, align: Align.Left);
+            // phần lời văn cỡ 14 cố định (mục 6)
+            foreach (var k in FormatProfile.BodySizedKinds) { st[k].MinSize = 14; st[k].MaxSize = 14; }
             return p;
         }
 
@@ -204,11 +237,13 @@ namespace VFormat.Core
             var p = new FormatProfile
             {
                 Kind = StandardKind.PhapDien_ND250,
-                ShortName = "NĐ 250",
-                FullName = "Pháp điển & hợp nhất văn bản QPPL",
-                Description = "Văn bản hợp nhất, pháp điển quy phạm pháp luật",
+                ShortName = "NĐ 250/2026",
+                FullName = "Nghị định 250/2026/NĐ-CP",
+                Description = "Kỹ thuật trình bày văn bản hợp nhất",
                 IssuePrefix = "PD250",
                 LineSpacing = 1.0f,
+                // ô trái khối đầu là "VĂN BẢN HỢP NHẤT" + số, ký hiệu (Phụ lục mục I.2, ví dụ 2): không kẻ dưới
+                CoQuanLineRatio = 0,
             };
             AddCommonStyles(p);
             var st = p.Styles;
@@ -241,6 +276,8 @@ namespace VFormat.Core
             st[ElementKind.MucSo] = S(14, 13, 14, bold: true, align: Align.Left, indentCm: 0, after: 3, single: false);
             st[ElementKind.MucChuCai] = S(14, 13, 14, bold: true, italic: true, align: Align.Justify, indentCm: 0.75f, after: 3, single: false);
             p.PageNumberInHeader = false; // KHBD thường đánh số ở chân trang
+            // Phụ lục IV chỉ quy định khung nội dung; thông số trình bày trên là khuyến nghị của V-FORMAT
+            p.FormatAdvisory = true;
             return p;
         }
     }

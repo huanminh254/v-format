@@ -54,6 +54,10 @@ namespace VFormat.Core
         /// <summary>Khóa so khớp: bỏ dấu, in hoa, gộp khoảng trắng.</summary>
         public static string Key(string s) => Regex.Replace(StripDiacritics(Clean(s)).ToUpperInvariant(), @"\s+", " ");
 
+        /// <summary>Các phần (đã Clean, khác rỗng) của một đoạn chia bằng tab — khối đầu gõ hai cột bằng tab.</summary>
+        public static string[] TabParts(string raw) =>
+            (raw ?? "").Split('\t').Select(Clean).Where(x => x.Length > 0).ToArray();
+
         public static int WordCount(string s) =>
             string.IsNullOrWhiteSpace(s) ? 0 : s.Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries).Length;
 

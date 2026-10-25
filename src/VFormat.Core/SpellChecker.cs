@@ -30,28 +30,15 @@ namespace VFormat.Core
 
         readonly List<Rule> _rules = new List<Rule>();
 
-        // Lỗi chính tả thường gặp (sai, đúng)
-        static readonly (string wrong, string right)[] CommonMistakes =
+        // Lỗi chính tả thường gặp: 403 cặp sinh từ typo_corrections_map.json
+        // (nguồn: Từ điển tiếng Việt Viện Ngôn ngữ học, Nghị quyết UBTVQH).
+        // Xem SpellCheckData.TypoPairs. Thêm cặp thủ công vào đây nếu cần ghi đè.
+        static readonly (string wrong, string right)[] ExtraMistakes =
         {
-            ("sử lý", "xử lý"), ("xử lí", "xử lý"), ("sát nhập", "sáp nhập"), ("xát nhập", "sáp nhập"),
-            ("chuẩn đoán", "chẩn đoán"), ("suông sẻ", "suôn sẻ"), ("xuất sắc", "xuất sắc"), ("xuất xắc", "xuất sắc"),
-            ("sáng lạng", "sáng lạn"), ("xán lạng", "xán lạn"), ("bàng hoàng", "bàng hoàng"), ("dành giật", "giành giật"),
-            ("tranh dành", "tranh giành"), ("dành độc lập", "giành độc lập"), ("giành dụm", "dành dụm"),
-            ("dò rỉ", "rò rỉ"), ("rò hỏi", "dò hỏi"), ("chí mạng", "chí mạng"), ("trí mạng", "chí mạng"),
-            ("chân thành", "chân thành"), ("trân thành", "chân thành"), ("trân trọng", "trân trọng"), ("chân trọng", "trân trọng"),
-            ("cọ sát", "cọ xát"), ("sứ mệnh", "sứ mệnh"), ("xứ mệnh", "sứ mệnh"), ("xơ xuất", "sơ suất"), ("sơ xuất", "sơ suất"),
-            ("xuất sứ", "xuất xứ"), ("năng xuất", "năng suất"), ("công xuất", "công suất"), ("đề suất", "đề xuất"),
-            ("kiểm sát viên", "kiểm sát viên"), ("bổ xung", "bổ sung"), ("sung yếu", "xung yếu"), ("xinh hoạt", "sinh hoạt"),
-            ("dữ gìn", "giữ gìn"), ("gìn dữ", "gìn giữ"), ("giữ dội", "dữ dội"), ("dang dở", "dang dở"), ("giang dở", "dang dở"),
-            ("chỉn chu", "chỉn chu"), ("chỉnh chu", "chỉn chu"), ("trau dồi", "trau dồi"), ("trao dồi", "trau dồi"),
-            ("lãng mạng", "lãng mạn"), ("lãng phí", "lãng phí"), ("lản phí", "lãng phí"), ("vô hình chung", "vô hình trung"),
-            ("tham quang", "tham quan"), ("cập nhập", "cập nhật"),
-            ("ngoan cố", "ngoan cố"), ("ngoang cố", "ngoan cố"), ("chia sẽ", "chia sẻ"),
-            ("chia xẻ", "chia sẻ"), ("bảo đãm", "bảo đảm"), ("đảm bão", "đảm bảo"), ("nghành", "ngành"), ("nghiêm chỉnh", "nghiêm chỉnh"),
-            ("giấy khai sinh", "giấy khai sinh"), ("xắp xếp", "sắp xếp"), ("sắp sếp", "sắp xếp"), ("sử dụng", "sử dụng"), ("xử dụng", "sử dụng"),
-            ("thẩm quyền", "thẩm quyền"), ("thẫm quyền", "thẩm quyền"), ("triển khai", "triển khai"), ("chiển khai", "triển khai"),
-            ("kỉ luật", "kỷ luật"), ("kĩ thuật", "kỹ thuật"), ("quí", "quý"), ("lí do", "lý do"), ("qui định", "quy định"), ("qui chế", "quy chế"),
-            ("qui trình", "quy trình"), ("qui mô", "quy mô"), ("qui hoạch", "quy hoạch"), ("lí luận", "lý luận"),
+            // Các cặp đã có trong TypoPairs — giữ lại chỗ này để dễ bổ sung thủ công khi phát hiện lỗi mới.
+            ("qui định", "quy định"), ("qui chế", "quy chế"), ("qui trình", "quy trình"),
+            ("qui mô", "quy mô"), ("qui hoạch", "quy hoạch"), ("quí", "quý"), ("lí do", "lý do"),
+            ("lí luận", "lý luận"), ("kĩ thuật", "kỹ thuật"), ("kỉ luật", "kỷ luật"),
         };
 
         // Viết hoa tên cơ quan, chức danh (Phụ lục II NĐ 30/2020)
@@ -74,8 +61,26 @@ namespace VFormat.Core
 
         public SpellChecker(IEnumerable<string> userRuleLines = null)
         {
-            foreach (var (w, r) in CommonMistakes.Where(x => x.wrong != x.right))
-                AddWordRule(w, r, "Lỗi chính tả thường gặp", ignoreCase: true);
+            // 403 cặp lỗi thường gặp (từ điển typo_corrections_map).
+            var typo = SpellCheckData.TypoPairs;
+            var seen = new HashSet<string>();
+            for (int i = 0; i < typo.GetLength(0); i++)
+            {
+                var w = typo[i, 0]; var r = typo[i, 1];
+                if (w != r && seen.Add(w.ToLowerInvariant()))
+                    AddWordRule(w, r, "Lỗi chính tả thường gặp", ignoreCase: true);
+            }
+            // 50 cặp thiếu dấu / dính từ (missing_tones_corrections, confidence 1.0).
+            var mt = SpellCheckData.MissingTonePairs;
+            for (int i = 0; i < mt.GetLength(0); i++)
+            {
+                var w = mt[i, 0]; var r = mt[i, 1];
+                if (w != r && seen.Add(w.ToLowerInvariant()))
+                    AddWordRule(w, r, "Thiếu dấu thanh / dính từ", ignoreCase: true);
+            }
+            foreach (var (w, r) in ExtraMistakes.Where(x => x.wrong != x.right))
+                if (seen.Add(w.ToLowerInvariant()))
+                    AddWordRule(w, r, "Lỗi chính tả thường gặp", ignoreCase: true);
             foreach (var (pat, r) in Capitalization)
                 AddWordRule(pat, r, "Viết hoa chưa đúng (Phụ lục II NĐ 30)", ignoreCase: false);
 

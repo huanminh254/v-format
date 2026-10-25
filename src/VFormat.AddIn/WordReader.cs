@@ -6,11 +6,24 @@ using Word = Microsoft.Office.Interop.Word;
 namespace VFormat.AddIn
 {
     /// <summary>Đọc tài liệu Word thành danh sách ParagraphInfo (kèm vị trí bảng, ô và định dạng hiện tại).</summary>
-    public class WordSnapshot
+    public class WordSnapshot : IDisposable
     {
         public List<ParagraphInfo> Paragraphs = new List<ParagraphInfo>();
         public List<Word.Paragraph> WordParagraphs = new List<Word.Paragraph>();
         public List<int> Starts = new List<int>();
+
+        public void Dispose()
+        {
+            if (WordParagraphs != null)
+            {
+                for (int i = 0; i < WordParagraphs.Count; i++)
+                {
+                    var p = WordParagraphs[i];
+                    ComReleaser.Release(ref p);
+                }
+                WordParagraphs.Clear();
+            }
+        }
     }
 
     public static class WordReader
@@ -55,6 +68,19 @@ namespace VFormat.AddIn
                         break;
                     }
 
+                if (TextUtil.Clean(info.Text).Length > 0)
+                {
+                    // thụt lề trái (khối chữ ký ở nửa phải) và số thứ tự tự động ("II." không có trong Range.Text)
+                    var left = p.Format.LeftIndent;
+                    info.LeftIndentPt = left >= Undefined ? 0 : left;
+                    var lf = r.ListFormat;
+                    if (lf.ListType != Word.WdListType.wdListNoNumbering)
+                    {
+                        info.InList = true;
+                        var ls = lf.ListString;
+                        info.ListPrefix = string.IsNullOrWhiteSpace(ls) ? null : ls;
+                    }
+                }
                 if (withFormat && TextUtil.Clean(info.Text).Length > 0)
                 {
                     var body = r.End - r.Start > 1 ? doc.Range(r.Start, r.End - 1) : r;
@@ -65,6 +91,8 @@ namespace VFormat.AddIn
                     info.FontSize = size >= Undefined ? 0 : size;
                     info.Bold = Tri(f.Bold);
                     info.Italic = Tri(f.Italic);
+                    var color = (int)f.Color;
+                    info.Colored = color != (int)Word.WdColor.wdColorAutomatic && color != 0;   // 0 = đen; hỗn hợp tính là có màu
                     var pf = p.Format;
                     info.FirstIndentPt = pf.FirstLineIndent >= Undefined ? 0 : pf.FirstLineIndent;
                     info.Alignment = ToAlign(pf.Alignment);

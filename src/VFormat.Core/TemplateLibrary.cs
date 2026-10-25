@@ -8,7 +8,7 @@ namespace VFormat.Core
     {
         public string Id;
         public string Name;
-        public string Group;          // Hành chính / Quân đội / Đảng / Đoàn / Pháp điển / Giáo dục
+        public string Group;          // Hành chính / Quân đội / Đảng / Đoàn / Hợp nhất / Giáo dục
         public StandardKind Standard;
         public List<string> Lines = new List<string>();
         public override string ToString() => $"{Group} › {Name}";
@@ -63,11 +63,15 @@ namespace VFormat.Core
             L.Add(coQuan);
             L.Add(doan ? "***" : "*");
             L.Add((doan ? "Số: " : "Số ") + "  -" + kyHieu);
+            if (tenLoai == null && trichYeu != null) L.Add(trichYeu);   // công văn: trích yếu dưới số, ký hiệu
             L.Add(doan ? "ĐOÀN TNCS HỒ CHÍ MINH" : "ĐẢNG CỘNG SẢN VIỆT NAM");
             L.Add("Hà Nội, " + Today());
-            L.Add(tenLoai);
-            if (trichYeu != null) L.Add(trichYeu);
-            if (!doan) L.Add("-----");
+            if (tenLoai != null)
+            {
+                L.Add(tenLoai);
+                if (trichYeu != null) L.Add(trichYeu);
+                L.Add(doan ? "-------" : "-----");
+            }
             L.Add(Blank);
             L.AddRange(body);
             L.Add(Blank);
@@ -158,15 +162,15 @@ namespace VFormat.Core
             // ===== Đảng (HD 05) =====
             list.Add(DangDoan("d-nq", "Nghị quyết", false, "ĐẢNG BỘ TỈNH ...", "HUYỆN ỦY ...", "NQ/HU", "NGHỊ QUYẾT", "về ...",
                 new[] { "I. TÌNH HÌNH", P, "II. MỤC TIÊU, NHIỆM VỤ", P, "III. TỔ CHỨC THỰC HIỆN", P },
-                "T/M BAN CHẤP HÀNH|BÍ THƯ", new[] { "- Tỉnh ủy (báo cáo),", "- Lưu Văn phòng Huyện ủy." }));
+                "T/M BAN CHẤP HÀNH|BÍ THƯ", new[] { "- Tỉnh ủy (báo cáo);", "- Lưu Văn phòng Huyện ủy." }));
             list.Add(DangDoan("d-bc", "Báo cáo (Đảng)", false, "ĐẢNG BỘ TỈNH ...", "HUYỆN ỦY ...", "BC/HU", "BÁO CÁO", "kết quả ...",
                 new[] { "I. KẾT QUẢ", P, "II. HẠN CHẾ", P, "III. NHIỆM VỤ", P },
-                "T/M BAN THƯỜNG VỤ|BÍ THƯ", new[] { "- Tỉnh ủy (báo cáo),", "- Lưu Văn phòng Huyện ủy." }));
+                "T/M BAN THƯỜNG VỤ|BÍ THƯ", new[] { "- Tỉnh ủy (báo cáo);", "- Lưu Văn phòng Huyện ủy." }));
             list.Add(DangDoan("d-tb", "Thông báo (Đảng)", false, "ĐẢNG BỘ TỈNH ...", "HUYỆN ỦY ...", "TB/HU", "THÔNG BÁO", "...",
-                new[] { P }, "T/M BAN THƯỜNG VỤ|BÍ THƯ", new[] { "- ...,", "- Lưu Văn phòng Huyện ủy." }));
+                new[] { P }, "T/M BAN THƯỜNG VỤ|BÍ THƯ", new[] { "- ...;", "- Lưu Văn phòng Huyện ủy." }));
             list.Add(DangDoan("d-qd", "Quyết định (Đảng)", false, "ĐẢNG BỘ TỈNH ...", "HUYỆN ỦY ...", "QĐ/HU", "QUYẾT ĐỊNH", "về ...",
-                new[] { "- Căn cứ Điều lệ Đảng;", "BAN THƯỜNG VỤ HUYỆN ỦY QUYẾT ĐỊNH", "Điều 1. " + P, "Điều 2. " + P },
-                "T/M BAN THƯỜNG VỤ|BÍ THƯ", new[] { "- Như Điều 2,", "- Lưu Văn phòng Huyện ủy." }));
+                new[] { "- Căn cứ Điều lệ Đảng;", "- Căn cứ Quy chế làm việc của Huyện ủy.", "BAN THƯỜNG VỤ HUYỆN ỦY QUYẾT ĐỊNH", "Điều 1. " + P, "Điều 2. " + P },
+                "T/M BAN THƯỜNG VỤ|BÍ THƯ", new[] { "- Như Điều 2;", "- Lưu Văn phòng Huyện ủy." }));
 
             // ===== Đoàn (HD 29) =====
             list.Add(DangDoan("dtn-kh", "Kế hoạch (Đoàn)", true, "BCH ĐOÀN TỈNH ...", "BCH ĐOÀN HUYỆN ...", "KH/HĐTN", "KẾ HOẠCH", "...",
@@ -175,21 +179,25 @@ namespace VFormat.Core
             list.Add(DangDoan("dtn-bc", "Báo cáo (Đoàn)", true, "BCH ĐOÀN TỈNH ...", "BCH ĐOÀN HUYỆN ...", "BC/HĐTN", "BÁO CÁO", "...",
                 new[] { "I. KẾT QUẢ", P, "II. TỒN TẠI", P, "III. PHƯƠNG HƯỚNG", P },
                 "TM. BAN THƯỜNG VỤ HUYỆN ĐOÀN|BÍ THƯ", new[] { "- Tỉnh Đoàn (b/c);", "- Lưu VP." }));
-            list.Add(DangDoan("dtn-cv", "Công văn (Đoàn)", true, "BCH ĐOÀN TỈNH ...", "BCH ĐOÀN HUYỆN ...", "CV/HĐTN", "CÔNG VĂN", "V/v ...",
+            list.Add(DangDoan("dtn-cv", "Công văn (Đoàn)", true, "BCH ĐOÀN TỈNH ...", "BCH ĐOÀN HUYỆN ...", "CV/HĐTN", null, "V/v ...",
                 new[] { "Kính gửi: ...", P }, "TM. BAN THƯỜNG VỤ HUYỆN ĐOÀN|PHÓ BÍ THƯ", new[] { "- Như kính gửi;", "- Lưu VP." }));
 
-            // ===== Pháp điển, hợp nhất =====
+            // ===== Văn bản hợp nhất (NĐ 250/2026/NĐ-CP, Phụ lục: sơ đồ mục I.2, ví dụ 2, phần ký xác thực mục XIII) =====
             list.Add(new DocTemplate
             {
-                Id = "pd-hn", Name = "Văn bản hợp nhất", Group = "Pháp điển", Standard = StandardKind.PhapDien_ND250,
+                Id = "pd-hn", Name = "Văn bản hợp nhất", Group = "Hợp nhất", Standard = StandardKind.PhapDien_ND250,
                 Lines =
                 {
-                    "BỘ ...", "Số:      /VBHN-...", TextNormalizer.QuocHieuText, TextNormalizer.TieuNguText, "Hà Nội, " + Today(),
-                    "VĂN BẢN HỢP NHẤT", "THÔNG TƯ", "Quy định ...", Blank,
-                    "Thông tư số .../.../TT-... ngày ... của ..., có hiệu lực kể từ ngày ..., được sửa đổi, bổ sung bởi: ...",
+                    "VĂN BẢN HỢP NHẤT", "Số:      /" + DateTime.Today.Year + "/VBHN-TT-...", TextNormalizer.QuocHieuText, TextNormalizer.TieuNguText,
+                    "Hà Nội, " + Today(),
+                    "THÔNG TƯ", "Quy định ...", Blank,
+                    "Thông tư số .../.../TT-... ngày ... tháng ... năm ... của ..., có hiệu lực kể từ ngày ... tháng ... năm ..., được sửa đổi, bổ sung bởi:",
+                    "Thông tư số .../.../TT-... ngày ... tháng ... năm ... của ... sửa đổi, bổ sung một số điều của ..., có hiệu lực kể từ ngày ... tháng ... năm ....",
+                    "Căn cứ ...;",
                     "Chương I", "QUY ĐỊNH CHUNG", "Điều 1. Phạm vi điều chỉnh", P, "Điều 2. Đối tượng áp dụng", P,
                     "Chương II", "QUY ĐỊNH CỤ THỂ", "Điều 3. ...", "1. " + P + ".", "a) " + P + ";", "b) " + P + ".",
-                    Blank, "Nơi nhận:", "- ...;", "- Lưu: VT, ....", "XÁC THỰC VĂN BẢN HỢP NHẤT", "BỘ TRƯỞNG", Blank, Blank, "Nguyễn Văn A",
+                    Blank, "Nơi nhận:", "- Văn phòng Chính phủ (để đăng Công báo);", "- Cơ quan có thẩm quyền (để đăng trên Cơ sở dữ liệu quốc gia về pháp luật);",
+                    "- Lưu: VT, ....", "BỘ ...", "XÁC THỰC VĂN BẢN HỢP NHẤT", "Hà Nội, " + Today(), "BỘ TRƯỞNG", "(Chữ ký và dấu)", Blank, Blank, "Nguyễn Văn A",
                 },
             });
 
@@ -201,11 +209,11 @@ namespace VFormat.Core
                 {
                     "Trường: ...", "Tổ: ...", "Họ và tên giáo viên: ...",
                     "KẾ HOẠCH BÀI DẠY", "TÊN BÀI DẠY: ...", "Môn học/Hoạt động giáo dục: ...; lớp: ...", "Thời gian thực hiện: (số tiết)",
-                    "I. MỤC TIÊU", "1. Về kiến thức", P, "2. Về năng lực", P, "3. Về phẩm chất", P,
-                    "II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU", P,
-                    "III. TIẾN TRÌNH DẠY HỌC",
+                    "I. Mục tiêu", "1. Về kiến thức: " + P, "2. Về năng lực: " + P, "3. Về phẩm chất: " + P,
+                    "II. Thiết bị dạy học và học liệu", P,
+                    "III. Tiến trình dạy học",
                     "1. Hoạt động 1: Xác định vấn đề/nhiệm vụ học tập/Mở đầu", "a) Mục tiêu", P, "b) Nội dung", P, "c) Sản phẩm", P, "d) Tổ chức thực hiện", P,
-                    "2. Hoạt động 2: Hình thành kiến thức mới", "a) Mục tiêu", P, "b) Nội dung", P, "c) Sản phẩm", P, "d) Tổ chức thực hiện", P,
+                    "2. Hoạt động 2: Hình thành kiến thức mới/giải quyết vấn đề/thực thi nhiệm vụ đặt ra từ Hoạt động 1", "a) Mục tiêu", P, "b) Nội dung", P, "c) Sản phẩm", P, "d) Tổ chức thực hiện", P,
                     "3. Hoạt động 3: Luyện tập", "a) Mục tiêu", P, "b) Nội dung", P, "c) Sản phẩm", P, "d) Tổ chức thực hiện", P,
                     "4. Hoạt động 4: Vận dụng", "a) Mục tiêu", P, "b) Nội dung", P, "c) Sản phẩm", P, "d) Tổ chức thực hiện", P,
                 },

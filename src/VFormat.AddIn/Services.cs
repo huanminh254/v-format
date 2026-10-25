@@ -190,7 +190,7 @@ namespace VFormat.AddIn
         {
             var p = ProfileForActive(doc, s);
             var left = new List<string> { "Nơi nhận:", "- Như trên;", "- ...;", "- Lưu: VT, ...." };
-            if (p.Kind == StandardKind.Dang_HD05) left = new List<string> { "Nơi nhận:", "- ...,", "- Lưu Văn phòng." };
+            if (p.Kind == StandardKind.Dang_HD05) left = new List<string> { "Nơi nhận:", "- ...;", "- Lưu Văn phòng." };
             var right = new List<string> { p.ThayMatText + " TÊN TẬP THỂ", "CHỨC VỤ NGƯỜI KÝ", "", "", "", "", "Nguyễn Văn A" };
             using (new WordBatch(app, "V-Format: Chèn khối chữ ký"))
             {

@@ -42,15 +42,16 @@ namespace VFormat.Docx
             using (var doc = WordprocessingDocument.Open(output, true))
             {
                 var m = DocxModel.Read(doc);
+                if (DocxCleanup.Run(m)) m = DocxModel.Read(doc);
                 var kind = options.Standard ?? StandardDetector.Detect(m.Infos);
                 p = Profiles.Get(kind).Clone();
-                if (kind != StandardKind.Dang_HD05) p.SetBodySize(options.BodySize);
-                p.LineSpacing = options.LineSpacing;
+                p.SetBodySize(options.BodySize);
+                p.SetLineSpacing(options.LineSpacing);
 
                 before = Classifier.Classify(m.Infos, p.Kind);
                 issuesBefore = FormatChecker.Check(before, p, DocxWriter.ReadPage(doc));
 
-                DocxWriter.PageSetup(doc, p);
+                DocxWriter.PageSetup(doc, p, Planner.HasContentTable(before));
                 var cd = before;
                 var hp = Planner.PlanHeader(cd, p);
                 if (hp != null)
@@ -65,14 +66,44 @@ namespace VFormat.Docx
                     m = DocxModel.Read(doc); cd = Classifier.Classify(m.Infos, p.Kind);
                 }
 
+                var (subjectFrom, subjectAfter) = Planner.PlanCongVanSubjectMove(cd);
+                int strayLabel = Planner.StrayCongVanLabel(cd);
+                if (subjectFrom >= 0 || strayLabel >= 0)
+                {
+                    if (subjectFrom >= 0)
+                    {
+                        DocxWriter.InsertParagraphAfter(m.Paras[subjectAfter], TextUtil.Clean(m.Infos[subjectFrom].Text));
+                        m.Paras[subjectFrom].Remove(); stats.Add("đưa trích yếu công văn vào khối đầu");
+                    }
+                    if (strayLabel >= 0) m.Paras[strayLabel].Remove();
+                    m = DocxModel.Read(doc); cd = Classifier.Classify(m.Infos, p.Kind);
+                }
+
+                var (labelFrom, labelBefore) = Planner.PlanConsolidatedLabelMove(cd, p);
+                if (labelFrom >= 0)
+                {
+                    var label = TextUtil.Clean(m.Infos[labelFrom].Text);
+                    var np = DocxWriter.InsertParagraphAfter(m.Paras[labelBefore], label);
+                    np.Remove(); m.Paras[labelBefore].InsertBeforeSelf(np);
+                    m.Paras[labelFrom].Remove(); stats.Add("đưa \"VĂN BẢN HỢP NHẤT\" vào ô trái khối đầu");
+                    m = DocxModel.Read(doc); cd = Classifier.Classify(m.Infos, p.Kind);
+                }
+
+                int dashesAfter = Planner.PlanTitleDashes(cd, p);
+                if (dashesAfter >= 0)
+                {
+                    DocxWriter.InsertParagraphAfter(m.Paras[dashesAfter], p.TitleDashes); stats.Add($"chèn \"{p.TitleDashes}\" dưới trích yếu");
+                    m = DocxModel.Read(doc); cd = Classifier.Classify(m.Infos, p.Kind);
+                }
+
                 int fixes = 0;
-                int lastNoiNhan = cd.Kinds.LastIndexOf(ElementKind.NoiNhanItem);
                 for (int i = 0; i < cd.Kinds.Count; i++)
                 {
-                    if (!Planner.IsFormal(cd.Kinds[i])) continue;
+                    if (!Planner.NeedsTextFix(cd, i, p)) continue;
+                    if (m.Infos[i].InTable && cd.Kinds[i] == ElementKind.ThongTinDau) continue;
                     var raw = m.Infos[i].Text;
                     var clean = TextUtil.Clean(raw);
-                    var fixedText = TextNormalizer.Fix(cd.Kinds[i], clean, p, i == lastNoiNhan);
+                    var fixedText = Planner.FixText(cd, i, p, clean);
                     if (fixedText.Length == 0 || fixedText == raw) continue;
                     DocxWriter.SetText(m.Paras[i], fixedText); fixes++;
                 }
@@ -85,9 +116,10 @@ namespace VFormat.Docx
 
                 m = DocxModel.Read(doc); cd = Classifier.Classify(m.Infos, p.Kind);
                 for (int i = 0; i < cd.Kinds.Count; i++)
-                    DocxWriter.Apply(m.Paras[i], Planner.PlanParagraph(cd.Kinds[i], m.Infos[i], p,
+                    DocxWriter.Apply(m.Paras[i], Planner.PlanParagraph(cd, i, p,
                         inList: m.Paras[i].ParagraphProperties?.NumberingProperties != null), p.FontName);
-                stats.Add($"{DocxWriter.FormatTables(m, cd, p)} bảng");
+                var page = DocxWriter.ReadPage(doc);
+                stats.Add($"{DocxWriter.FormatTables(m, cd, p, page.WidthMm - page.LeftMm - page.RightMm)} bảng");
                 DocxWriter.PageNumbers(doc, p);
 
                 (headerT, signT) = Planner.FormalTables(cd);

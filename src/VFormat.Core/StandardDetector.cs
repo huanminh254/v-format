@@ -24,7 +24,8 @@ namespace VFormat.Core
 
         public static StandardKind Detect(IList<ParagraphInfo> paragraphs)
         {
-            var head = paragraphs.Take(25).Select(p => TextUtil.Key(p.Text)).Where(t => t.Length > 0).ToList();
+            // khối đầu gõ hai cột bằng tab: xét từng phần ("HUYỆN ỦY ... ⇥ ĐẢNG CỘNG SẢN VIỆT NAM")
+            var head = paragraphs.Take(25).SelectMany(p => TextUtil.TabParts(p.Text)).Select(TextUtil.Key).Where(t => t.Length > 0).ToList();
             var all = paragraphs.Take(60).Select(p => TextUtil.Key(p.Text)).ToList();
 
             if (all.Any(t => t.Contains("KE HOACH BAI DAY") || t.StartsWith("GIAO AN")))

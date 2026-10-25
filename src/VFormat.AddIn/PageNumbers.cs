@@ -1,3 +1,4 @@
+using System;
 using VFormat.Core;
 using Word = Microsoft.Office.Interop.Word;
 
@@ -12,6 +13,20 @@ namespace VFormat.AddIn
             foreach (Word.Section s in doc.Sections)
             {
                 s.PageSetup.DifferentFirstPageHeaderFooter = first && p.HidePageNumberOnFirstPage ? -1 : 0;
+
+                // Căn giữa số trang theo dải lề chuẩn kỹ thuật
+                float sizePt = p.PageNumberSize > 0 ? p.PageNumberSize : 14f;
+                if (p.PageNumberInHeader)
+                {
+                    float topMargin = s.PageSetup.TopMargin;
+                    s.PageSetup.HeaderDistance = Math.Max(10f, (topMargin - sizePt) / 2f);
+                }
+                else
+                {
+                    float bottomMargin = s.PageSetup.BottomMargin;
+                    s.PageSetup.FooterDistance = Math.Max(10f, (bottomMargin - sizePt) / 2f);
+                }
+
                 var primaryHeader = s.Headers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary];
                 var primaryFooter = s.Footers[Word.WdHeaderFooterIndex.wdHeaderFooterPrimary];
                 if (!first && primaryHeader.LinkToPrevious && primaryFooter.LinkToPrevious) continue;

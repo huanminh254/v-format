@@ -23,6 +23,8 @@ namespace VFormat.AddIn
         static bool Apply(Word.Document doc, WordSnapshot snap, TablePlan plan)
         {
             if (plan == null) return false;
+            // đoạn khác đã đưa vào bảng (nằm sau khối): xóa trước để vị trí khối không đổi
+            foreach (var i in plan.Remove.OrderByDescending(x => x)) snap.WordParagraphs[i].Range.Delete();
             ReplaceWithTable(doc, snap.WordParagraphs[plan.First].Range.Start, snap.WordParagraphs[plan.Last].Range.End,
                 plan.Left, plan.Right, plan.LeftMm, plan.RightMm);
             return true;
@@ -165,27 +167,49 @@ namespace VFormat.AddIn
             else { x1 = innerL + (lo == start ? pf.FirstLineIndent : 0); x2 = x1 + textW; }
 
             float y = yEnd + size * 1.2f + 1f;
+            // chữ chỉ số trên ("hoạt⁽³⁾") làm dòng cao hơn, chân chữ thấp xuống: hạ đường kẻ tương ứng
+            if (lastLine.Font.Superscript != 0) y += size * 0.35f;
 
             // Đoạn kế sát ngay dưới (trích yếu → chức vụ ký): thêm khoảng cách sau để đường kẻ không đè lên chữ
             var next = para.Next();
             if (next != null)
             {
                 float yNext = Y(doc.Range(next.Range.Start, next.Range.Start));
-                float need = (float)Math.Ceiling(y + 4f - yNext);
+                // chừa đủ chỗ cho dấu thanh của chữ hoa dòng dưới ("Thượng", "Duẩn") — 4pt thì đường kẻ chạm dấu
+                float need = (float)Math.Ceiling(y + 8f - yNext);
                 if (yNext > yEnd && need > 0) para.SpaceAfter += need;
             }
             float w = (x2 - x1) * ratio, left = (x1 + x2) / 2 - w / 2;
 
-            var shape = doc.Shapes.AddLine(left, y, left + w, y, pr);
+            float yParaStart = Y(doc.Range(start, start));
+            float relTop = Math.Max(0, y - yParaStart);
+            bool inTable = (bool)pr.Information[Word.WdInformation.wdWithInTable];
+
+            var shape = doc.Shapes.AddLine(0, 0, w, 0, pr);
             shape.Name = ShapePrefix + n;
-            shape.LayoutInCell = 0;
-            shape.RelativeHorizontalPosition = Word.WdRelativeHorizontalPosition.wdRelativeHorizontalPositionPage;
-            shape.RelativeVerticalPosition = Word.WdRelativeVerticalPosition.wdRelativeVerticalPositionPage;
-            shape.Left = left; shape.Top = y; shape.Width = w; shape.Height = 0;
+            shape.WrapFormat.Type = Word.WdWrapType.wdWrapNone;
+            shape.LockAnchor = -1;
             shape.Line.ForeColor.RGB = 0;
             shape.Line.Weight = 0.75f;
-            shape.WrapFormat.Type = Word.WdWrapType.wdWrapFront;
-            shape.LockAnchor = -1;
+
+            if (inTable)
+            {
+                shape.LayoutInCell = -1;
+                shape.RelativeHorizontalPosition = Word.WdRelativeHorizontalPosition.wdRelativeHorizontalPositionColumn;
+                shape.RelativeVerticalPosition = Word.WdRelativeVerticalPosition.wdRelativeVerticalPositionParagraph;
+                shape.Width = Math.Min(w, boxWidth);
+                shape.Left = Math.Max(0f, (boxWidth - shape.Width) / 2f);
+                shape.Top = relTop;
+            }
+            else
+            {
+                shape.LayoutInCell = 0;
+                shape.RelativeHorizontalPosition = Word.WdRelativeHorizontalPosition.wdRelativeHorizontalPositionPage;
+                shape.RelativeVerticalPosition = Word.WdRelativeVerticalPosition.wdRelativeVerticalPositionParagraph;
+                shape.Width = w;
+                shape.Left = left;
+                shape.Top = relTop;
+            }
             return true;
         }
     }
