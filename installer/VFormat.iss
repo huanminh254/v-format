@@ -1,5 +1,5 @@
 ; Bộ cài Inno Setup (tùy chọn) — biên dịch trên Windows bằng Inno Setup 6:  iscc installer\VFormat.iss
-#define AppVersion "1.1.0"
+#define AppVersion "1.2.0"
 [Setup]
 AppId={{B3E1C0A2-5D7E-4C11-9A53-6F0D5B1E7A10}
 AppName=V-FORMAT

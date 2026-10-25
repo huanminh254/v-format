@@ -7,7 +7,7 @@
     <Nullable>disable</Nullable>
     <AssemblyName>VFormat</AssemblyName>
     <RootNamespace>VFormat.App</RootNamespace>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Product>V-FORMAT</Product>
     <Description>Chuẩn hóa thể thức văn bản Word</Description>
     <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
